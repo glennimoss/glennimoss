@@ -86,9 +86,13 @@ function svnpropdiff {
 
 # make sqlplus suck a little less
 [ $(which rlwrap) ] && {
+  SQLPLUS=sqlplus
+  if [ $(which sqlplus64) ]; then
+    SQLPLUS=sqlplus64
+  fi
   function sqlplus {
     source ${HOME}/.sqlplus/login.sql.sh > ${HOME}/.sqlplus/login.sql
-    rlwrap -b "" -f $HOME/.sqlplus/sql.dict -H $HOME/.sqlplus/history sqlplus $*
+    rlwrap -b "" -f $HOME/.sqlplus/sql.dict -H $HOME/.sqlplus/history $SQLPLUS $*
   }
 }
 export SQLPATH=${SQLPATH}${SQLPATH:+:}.:$HOME/.sqlplus

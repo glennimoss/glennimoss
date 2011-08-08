@@ -48,6 +48,9 @@ let &stl="%<%n %f %([%H%R%W%Y%M]%)%{'!'[&ff=='".&ff."']}%{'$'[!&list]}%{'~'[&pm=
 " Store all swap files in .vim/swap
 set dir=~/.vimswap//
 
+" Add .vimlocal to the runtimepath for local-specific configs
+set runtimepath+=~/.vimlocal
+
 if !has("gui_running")
   set term=builtin_xterm	" use xterm keyboard mappings
 endif

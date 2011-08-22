@@ -8,37 +8,37 @@ set backspace=indent,eol,start
 set autoread            " read changed files, if no unsaved changes
 set autochdir           " cd to the directory of the file in the active buffer
 set so=5                " always have 5 lines above or below the cursor
-set autoindent		      " always set autoindenting on
-set smartindent		      " be smart about indenting new lines
-set nobackup		        " don't keep a backup file
+set autoindent          " always set autoindenting on
+set smartindent         " be smart about indenting new lines
+set nobackup            " don't keep a backup file
 set viminfo=%,'10,<100,f1,:20,n~/.viminfo
-set history=50		      " keep 50 lines of command line history
-set ruler		            " show the cursor position all the time
-set ffs=unix,dos,mac	  " preferred file format order
-set showmatch		        " highlight matching brackets
-set mat=5		            " tenths of a second to blink matching brackets
-set showcmd		          " display incomplete commands
-set incsearch		        " do incremental searching
+set history=50          " keep 50 lines of command line history
+set ruler               " show the cursor position all the time
+set ffs=unix,dos,mac    " preferred file format order
+set showmatch           " highlight matching brackets
+set mat=5               " tenths of a second to blink matching brackets
+set showcmd             " display incomplete commands
+set incsearch           " do incremental searching
 set ignorecase          " ignore case when searching
 set smartcase           " don't ignore case if pattern contains uppercase
-set hidden		          " Allow hiding dirty buffers
-set visualbell		      " don't beep, flash
+set hidden              " Allow hiding dirty buffers
+set visualbell          " don't beep, flash
 set t_vb=1              " ditto
-set noerrorbells	      " don't beep damn it
-set wildmenu		        " cool statusline tricks
+set noerrorbells        " don't beep damn it
+set wildmenu            " cool statusline tricks
 set wildmode=longest:full,full
 set fillchars=vert:\ ,stl:\ ,stlnc:\  "no funny fill chars in splitters
-set nostartofline	      " don't jump from column to cloumn when changin lines
-set formatoptions+=r	  " add comment formatting stuff
-set laststatus=2	      " always show status line
-set shortmess=atI	      " always show short messages
-set whichwrap=<,>,h,l	  " let cursors movment wrap to next/previous line
-set pastetoggle=<M-p>	  " easy paste switch
-set noicon		          "
-set title		            "
-set lazyredraw		      " don't redraw during macros
-set report=0		        " tell me when anything changes
-set listchars=tab:\|-,trail:.,extends:>,precedes:<,eol:$
+set nostartofline       " don't jump from column to cloumn when changin lines
+set formatoptions+=r    " add comment formatting stuff
+set laststatus=2        " always show status line
+set shortmess=atI       " always show short messages
+set whichwrap=<,>,h,l   " let cursors movment wrap to next/previous line
+set pastetoggle=<M-p>   " easy paste switch
+set noicon              "
+set title               "
+set lazyredraw          " don't redraw during macros
+set report=0            " tell me when anything changes
+set listchars=tab:\|-,trail:·,extends:>,precedes:<,eol:$
 " print format layout
 set printoptions=left:0.5in,right:0.5in,top:0.25in,bottom:0.5in,paper:letter
 " fancy status line
@@ -49,22 +49,22 @@ let &stl="%<%n %f %([%H%R%W%Y%M]%)%{'!'[&ff=='".&ff."']}%{'$'[!&list]}%{'~'[&pm=
 set dir=~/.vimswap//
 
 " Add .vimlocal to the runtimepath for local-specific configs
-set runtimepath+=~/.vimlocal
+set runtimepath^=~/.vimlocal
 
 if !has("gui_running")
-  set term=builtin_xterm	" use xterm keyboard mappings
+  set term=builtin_xterm  " use xterm keyboard mappings
 endif
 
 syntax on               " enable syntax highlighting
 color borland           " set color scheme
 
-set viewoptions=folds	  " save flod state
-set foldmethod=marker	  " fold at markers
-set nofoldenable	      " folds off by default
+set viewoptions=folds   " save flod state
+set foldmethod=marker   " fold at markers
+set nofoldenable        " folds off by default
 
-set gcr=n:blinkon0	    " no blinking gvim cursor
-set tags=.tags,tags	    " use .tags for tags file
-set nojoinspaces	      " don't add spaces after period on gpip
+set gcr=n:blinkon0      " no blinking gvim cursor
+set tags=.tags,tags     " use .tags for tags file
+set nojoinspaces        " don't add spaces after period on gpip
 
 "" keyboard shortcuts
 let mapleader = "\\"    " use \ as leader char (default, but be safe)
@@ -102,9 +102,12 @@ nnoremap <S-Enter> A<CR><Esc>
 " for when you forget to sudo vim
 command! W w !sudo tee % > /dev/null
 
+" Use Python 3 docs
+let g:pydoc_cmd = 'pydoc3'
+
 " if +windows support compiled
 if has("windows")
-  set showtabline=1	" show page tabs if two or more
+  set showtabline=1 " show page tabs if two or more
   set guitablabel=%t
   let g:toggleTabs = 0
   " toggle tabs on/off with F3
@@ -131,9 +134,13 @@ filetype plugin indent on
 
 "highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 " mark trailing spaces as an error
-syntax match Error /\s\+$/ containedin=ALL
+highlight InvalidWhitespace ctermbg=red guibg=red
+match InvalidWhitespace  /\s\+$/
+
 " mixed spaces and tabs is error
-syntax match Error / \+\t/ containedin=ALL
+"syntax match Error / \+\t/ containedin=ALL
+2match InvalidWhitespace  / \+\t *\| *\t \+/
+
 " lines over 80 chars are error colored
 "syntax match OverLength /\%81v.\+/ containedin=ALL
 
@@ -161,52 +168,24 @@ set cino=>1s,n-1s,:1s,=1s,(2s,+2s
 set cink=0{,0},:,!^F,!<Tab>,o,O,e
 
 if has("autocmd")
-  augroup Bender
+  augroup Vimrc
     "remove ALL autocommands for the current group
     autocmd!
 
     autocmd BufEnter * :syntax sync fromstart " ensure full syntax hilighting
 
-    " For all text files set 'textwidth' to 78 characters.
-    autocmd FileType text setlocal textwidth=78
-
     " underline current line in insert mode
     autocmd InsertLeave * se nocul
     autocmd InsertEnter * se cul
 
-    " default settings for programming files
-    function! Bender_ProgDefaults()
-      set shiftwidth=2
-      set tabstop=2
-      set softtabstop=0
-      set expandtab
-      set textwidth=78
-      set cino=>1s,n-1s,:1s,=1s,(2s,+2s
-      set cink=0{,0},:,!^F,!<Tab>,o,O,e
-    endfunction
-
     " java files
-    autocmd FileType java call Bender_ProgDefaults()
     let java_highlight_java_lang_ids=1
     let java_highlight_all=1
     let java_allow_cpp_keywords=1
     let java_highlight_debug=1
 
-    " php files
-    " treat .php.inc as php
-    autocmd BufNewFile,BufRead *.php.inc set filetype=php
-    " skeleton file for new php documents
-    autocmd BufNewFile *.php call K_CreatePhpSkeleton(expand('<afile>:p:r'))
-
-
     " c, h files
     let c_syntax_for_h=1
-
-    " xml/html files
-    autocmd FileType html,xml,xsl set sw=2 ts=2 sts=0 et
-
-    " yaml config files
-    autocmd FileType yaml set sw=2 ts=2 sts=0 et
 
     let b:closetag_html_style=1
     autocmd Filetype html,xml,xsl,php source ~/.vim/scripts/closetag.vim
@@ -220,12 +199,10 @@ if has("autocmd")
     let SVNCommandNameResultBuffers=1
 
     " perl
-    autocmd FileType perl call Bender_ProgDefaults()
     let perl_extended_vars=1 " highlight advanced perl vars inside strings
 
     " don't expand tabs to spaces in makefiles
-    autocmd BufEnter [Mm]akefile* set noet
-    autocmd BufLeave [Mm]akefile* set et
+    autocmd BufNewFile,BufRead [Mm]akefile* setlocal noet
   augroup END
 
   augroup JumpCursorOnEdit

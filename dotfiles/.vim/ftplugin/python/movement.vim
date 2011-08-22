@@ -86,53 +86,53 @@ vmap ]f   :call PythonDec("function", 1)<CR>
 
 
 
-" Menu entries
-nmenu <silent> &Python.Update\ IM-Python\ Menu
-    \:call UpdateMenu()<CR>
-nmenu &Python.-Sep1- :
-nmenu <silent> &Python.Beginning\ of\ Block<Tab>[t
-    \]t
-nmenu <silent> &Python.End\ of\ Block<Tab>]e
-    \]e
-nmenu &Python.-Sep2- :
-nmenu <silent> &Python.Shift\ Block\ Left<Tab>]<
-    \]<
-vmenu <silent> &Python.Shift\ Block\ Left<Tab>]<
-    \]<
-nmenu <silent> &Python.Shift\ Block\ Right<Tab>]>
-    \]>
-vmenu <silent> &Python.Shift\ Block\ Right<Tab>]>
-    \]>
-nmenu &Python.-Sep3- :
-vmenu <silent> &Python.Comment\ Selection<Tab>]#
-    \]#
-nmenu <silent> &Python.Comment\ Selection<Tab>]#
-    \]#
-vmenu <silent> &Python.Uncomment\ Selection<Tab>]u
-    \]u
-nmenu <silent> &Python.Uncomment\ Selection<Tab>]u
-    \]u
-nmenu &Python.-Sep4- :
-nmenu <silent> &Python.Previous\ Class<Tab>]J
-    \]J
-nmenu <silent> &Python.Next\ Class<Tab>]j
-    \]j
-nmenu <silent> &Python.Previous\ Function<Tab>]F
-    \]F
-nmenu <silent> &Python.Next\ Function<Tab>]f
-    \]f
-nmenu &Python.-Sep5- :
-nmenu <silent> &Python.Select\ Block<Tab>]v
-    \]v
-nmenu <silent> &Python.Select\ Function<Tab>]d
-    \]d
-nmenu <silent> &Python.Select\ Class<Tab>]c
-    \]c
-nmenu &Python.-Sep6- :
-nmenu <silent> &Python.Previous\ Line\ wrt\ indent<Tab>]<up>
-    \]<up>
-nmenu <silent> &Python.Next\ Line\ wrt\ indent<Tab>]<down>
-    \]<down>
+"" Menu entries
+"nmenu <silent> &Python.Update\ IM-Python\ Menu
+    "\:call UpdateMenu()<CR>
+"nmenu &Python.-Sep1- :
+"nmenu <silent> &Python.Beginning\ of\ Block<Tab>[t
+    "\]t
+"nmenu <silent> &Python.End\ of\ Block<Tab>]e
+    "\]e
+"nmenu &Python.-Sep2- :
+"nmenu <silent> &Python.Shift\ Block\ Left<Tab>]<
+    "\]<
+"vmenu <silent> &Python.Shift\ Block\ Left<Tab>]<
+    "\]<
+"nmenu <silent> &Python.Shift\ Block\ Right<Tab>]>
+    "\]>
+"vmenu <silent> &Python.Shift\ Block\ Right<Tab>]>
+    "\]>
+"nmenu &Python.-Sep3- :
+"vmenu <silent> &Python.Comment\ Selection<Tab>]#
+    "\]#
+"nmenu <silent> &Python.Comment\ Selection<Tab>]#
+    "\]#
+"vmenu <silent> &Python.Uncomment\ Selection<Tab>]u
+    "\]u
+"nmenu <silent> &Python.Uncomment\ Selection<Tab>]u
+    "\]u
+"nmenu &Python.-Sep4- :
+"nmenu <silent> &Python.Previous\ Class<Tab>]J
+    "\]J
+"nmenu <silent> &Python.Next\ Class<Tab>]j
+    "\]j
+"nmenu <silent> &Python.Previous\ Function<Tab>]F
+    "\]F
+"nmenu <silent> &Python.Next\ Function<Tab>]f
+    "\]f
+"nmenu &Python.-Sep5- :
+"nmenu <silent> &Python.Select\ Block<Tab>]v
+    "\]v
+"nmenu <silent> &Python.Select\ Function<Tab>]d
+    "\]d
+"nmenu <silent> &Python.Select\ Class<Tab>]c
+    "\]c
+"nmenu &Python.-Sep6- :
+"nmenu <silent> &Python.Previous\ Line\ wrt\ indent<Tab>]<up>
+    "\]<up>
+"nmenu <silent> &Python.Next\ Line\ wrt\ indent<Tab>]<down>
+    "\]<down>
 
 :com! PBoB execute "normal ".PythonBoB(line('.'), -1, 1)."G"
 :com! PEoB execute "normal ".PythonBoB(line('.'), 1, 1)."G"

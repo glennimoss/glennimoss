@@ -38,7 +38,7 @@ set noicon              "
 set title               "
 set lazyredraw          " don't redraw during macros
 set report=0            " tell me when anything changes
-set listchars=tab:\|-,trail:·,extends:>,precedes:<,eol:$
+set listchars=tab:\|-,trail:.,extends:>,precedes:<,eol:$
 " print format layout
 set printoptions=left:0.5in,right:0.5in,top:0.25in,bottom:0.5in,paper:letter
 " fancy status line

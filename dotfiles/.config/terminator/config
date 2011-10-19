@@ -1,0 +1,77 @@
+[global_config]
+  handle_size = 0
+  enabled_plugins = ActivityWatch, TerminalShot, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
+  dbus = True
+  focus = mouse
+  borderless = True
+  title_transmit_bg_color = "#4e9a06"
+[keybindings]
+  go_up = <Alt>k
+  split_horiz = <Control><Alt>minus
+  go_down = <Alt>j
+  split_vert = <Control><Alt>backslash
+  go_right = <Alt>l
+  go_left = <Alt>h
+[profiles]
+  [[default]]
+    palette = "#000000:#aa0000:#00aa00:#aa5500:#0000aa:#aa00aa:#00aaaa:#aaaaaa:#555555:#ff5555:#55ff55:#ffff55:#5555ff:#ff55ff:#55ffff:#ffffff"
+    visible_bell = True
+    scrollback_lines = 10000
+    antialias = False
+    cursor_color = ""
+    foreground_color = "#ffffff"
+    scroll_on_output = False
+    exit_action = restart
+    word_chars = "-A-Za-z0-9,./?%&#_=+~"
+    allow_bold = False
+  [[default_no_scrollbar]]
+    palette = "#000000:#aa0000:#00aa00:#aa5500:#0000aa:#aa00aa:#00aaaa:#aaaaaa:#555555:#ff5555:#55ff55:#ffff55:#5555ff:#ff55ff:#55ffff:#ffffff"
+    visible_bell = True
+    scrollback_lines = 10000
+    scrollbar_position = disabled
+    cursor_color = ""
+    foreground_color = "#ffffff"
+    scroll_on_output = False
+    exit_action = restart
+    antialias = False
+    word_chars = "-A-Za-z0-9,./?%&#_=+~"
+    allow_bold = False
+[layouts]
+  [[default]]
+    [[[window0]]]
+      position = 0:0
+      type = Window
+      order = 0
+      parent = ""
+      size = 1280, 1024
+    [[[paneTop]]]
+      type = HPaned
+      order = 0
+      parent = window0
+      position = 798
+    [[[termLocal]]]
+      profile = default
+      type = Terminal
+      order = 0
+      parent = paneTop
+      command = ""
+    [[[paneRemote]]]
+      type = VPaned
+      order = 1
+      parent = paneTop
+      position = 703
+    [[[termRemoteVim]]]
+      profile = default_no_scrollbar
+      type = Terminal
+      order = 0
+      parent = paneRemote
+      #command = /home/gim/bin/govm vim
+      exit_action = restart
+    [[[termRemote]]]
+      profile = default
+      type = Terminal
+      order = 1
+      parent = paneRemote
+      #command = /home/gim/bin/govm
+      exit_action = restart
+[plugins]

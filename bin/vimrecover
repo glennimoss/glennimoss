@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SWAP_PAT=""
+swap_files=$(find . -regex '.*/\.[^/]*\.sw.$')
+for s in $swap_files ; do
+  orig_file=$(echo $s | perl -pe 's!/\.([^/]*)\.sw.$!/$1!')
+  echo "Editing $orig_file"
+  sleep 1
+  vim -r "$orig_file" -c "DiffOrig"
+  echo -n "  Ok to delete swap file? [y/n] "
+  read resp
+  if [ "$resp" == "y" ] ; then
+    echo "  Deleting $s"
+    rm $s
+  fi
+done

@@ -36,11 +36,12 @@ SELECT DECODE(i.generated, 'GENERATED NAME', 'Gen''d: ') || i.constraint_name AS
          i.index_owner || '.' || i.index_name
        ELSE NULL
        END AS using_index
+    ,  MAX(i.status) AS status
 FROM user_constraints i
    , user_cons_columns c
 WHERE i.table_name = UPPER('&1')
   AND i.constraint_name = c.constraint_name(+)
-GROUP BY i.constraint_name, i.generated, i.index_owner, i.index_name;
+GROUP BY i.constraint_name, i.generated, i.index_owner, i.index_name, i.status;
 
 prompt Constraint Expressions:
 SELECT i.constraint_name

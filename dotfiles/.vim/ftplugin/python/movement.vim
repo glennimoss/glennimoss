@@ -36,8 +36,12 @@
 "   ]u      -- Uncomment selection
 "   ]c      -- Select current/previous class
 "   ]d      -- Select current/previous function
+"   GIM changed:
 "   ]<up>   -- Jump to previous line with the same/lower indentation
 "   ]<down> -- Jump to next line with the same/lower indentation
+"   TO:
+"   ]k  -- Jump to previous line with the same/lower indentation
+"   ]j -- Jump to next line with the same/lower indentation
 
 " Only do this when not done yet for this buffer
 if exists("b:loaded_py_ftplugin")
@@ -64,17 +68,19 @@ vmap ]u   :call PythonUncommentSelection()<CR>
 map  ]c   :call PythonSelectObject("class")<CR>
 map  ]d   :call PythonSelectObject("function")<CR>
 
-map  ]<up>    :call PythonNextLine(-1)<CR>
-map  ]<down>  :call PythonNextLine(1)<CR>
+"map  ]<up>    :call PythonNextLine(-1)<CR>
+"map  ]<down>  :call PythonNextLine(1)<CR>
 " You may prefer use <s-up> and <s-down>... :-)
+map  ]k   :call PythonNextLine(-1)<CR>
+map  ]j   :call PythonNextLine(1)<CR>
 
 " jump to previous class
-map  ]J   :call PythonDec("class", -1)<CR>
-vmap ]J   :call PythonDec("class", -1)<CR>
+"map  ]J   :call PythonDec("class", -1)<CR>
+"vmap ]J   :call PythonDec("class", -1)<CR>
 
 " jump to next class
-map  ]j   :call PythonDec("class", 1)<CR>
-vmap ]j   :call PythonDec("class", 1)<CR>
+"map  ]j   :call PythonDec("class", 1)<CR>
+"vmap ]j   :call PythonDec("class", 1)<CR>
 
 " jump to previous function
 map  ]F   :call PythonDec("function", -1)<CR>

@@ -60,3 +60,6 @@ hi Cursor       guifg=Black guibg=Yellow
 
 hi Ignore       ctermfg=DarkYellow ctermbg=bg
 hi Ignore       guifg=DarkYellow guibg=bg
+
+hi Todo         ctermbg=DarkYellow
+hi Todo         guibg=DarkYellow

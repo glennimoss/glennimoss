@@ -1,9 +1,5 @@
 #!/bin/bash
 
-$(ls --help 2>/dev/null | grep -- --color= >/dev/null) && {
-  alias ls='ls -bF --color=auto' #yea! color!
-}
-
 alias la='ls -a'
 alias ll='ls -lh'
 alias lld='ll -d'
@@ -85,15 +81,11 @@ function svnpropdiff {
   diff -F '^  [^ ]' <(svn pl -v -r $pre .) <(svn pl -v -r $post .)
 }
 
-# make sqlplus suck a little less
-[ $(which rlwrap) ] && {
-  SQLPLUS=sqlplus
-  if [ $(which sqlplus64) ]; then
-    SQLPLUS=sqlplus64
-  fi
-  function sqlplus {
-    source ${HOME}/.sqlplus/login.sql.sh > ${HOME}/.sqlplus/login.sql
-    rlwrap -b "" -f $HOME/.sqlplus/sql.dict -H $HOME/.sqlplus/history $SQLPLUS $*
-  }
+# If not running interactively, don't do anything more
+[[ $- =~ i ]] || return
+
+$(ls --help 2>/dev/null | grep -- --color= >/dev/null) && {
+  alias ls='ls -bF --color=auto' #yea! color!
 }
-export SQLPATH=${SQLPATH}${SQLPATH:+:}.:$HOME/.sqlplus
+
+alias sqlplus="$HOME/.sqlplus/sqlplus.sh"

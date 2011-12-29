@@ -2,6 +2,8 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+call pathogen#infect()
+
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
@@ -39,6 +41,7 @@ set title               "
 set lazyredraw          " don't redraw during macros
 set report=0            " tell me when anything changes
 set listchars=tab:\|-,trail:.,extends:>,precedes:<,eol:$
+set shellcmdflag=-lc    " Make :! be a login shell so .profile is read
 " print format layout
 set printoptions=left:0.5in,right:0.5in,top:0.25in,bottom:0.5in,paper:letter
 " fancy status line
@@ -77,6 +80,10 @@ nmap <A-h> <C-w>h
 nmap <A-l> <C-w>l
 nmap <A-j> <C-w>j
 nmap <A-k> <C-w>k
+nmap <C-h> <C-w>h
+nmap <C-l> <C-w>l
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
 
 " Don't use Ex mode, use Q for formatting
 nnoremap Q gq
@@ -97,7 +104,6 @@ vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
 
 " Enter breaks a line
 nnoremap <Enter> i<CR><Esc>
-nnoremap <S-Enter> A<CR><Esc>
 
 " for when you forget to sudo vim
 command! W w !sudo tee % > /dev/null

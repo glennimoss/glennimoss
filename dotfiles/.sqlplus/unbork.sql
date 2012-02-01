@@ -1,0 +1,6 @@
+CREATE TABLE &1._dup AS (SELECT * FROM &1);
+
+DROP TABLE &1;
+
+ALTER TABLE &1._dup RENAME TO &1;
+

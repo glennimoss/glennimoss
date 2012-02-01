@@ -20,10 +20,7 @@
 "\eOH": beginning-of-line
 "\eOF": end-of-line
 
-# Allow 8-bit input/output
-set meta-flag on
-set convert-meta off
-set input-meta on
+set convert-meta on
 set output-meta on
 
 # By default up/down are bound to previous-history
@@ -37,6 +34,7 @@ set output-meta on
 "\e[B": history-search-forward
 "\e[A": history-search-backward
 
+set editing-mode vi
 set keymap vi
 
 $if Bash

@@ -1,5 +1,6 @@
 set echo off
 SET VERIFY OFF
+set define on
 column index_type format a10
 column column_names format a30
 column column_name format a30

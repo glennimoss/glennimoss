@@ -20,9 +20,9 @@ endif
 " basic prerequisites check
 if !has('ruby')
   " check for ruby support
-  echohl WarningMsg
-  echo "***warning*** VoraX needs ruby support"
-  echohl Normal
+  "echohl WarningMsg
+  "echo "***warning*** VoraX needs ruby support"
+  "echohl Normal
   finish
 else
   " is it ruby 1.8?

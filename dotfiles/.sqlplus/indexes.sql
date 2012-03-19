@@ -9,18 +9,16 @@ column column_expression format a60
 column search_condition format a60
 column using_index format a40
 prompt Indexes:
-SELECT DECODE(i.generated, 'Y', 'Gen''d: ') || i.index_name AS index_name
-     , REPLACE(MAX(i.index_type), 'FUNCTION-BASED', 'FnB') AS index_type
-     , MAX(uniqueness) AS uniqueness
-     , LISTAGG(c.column_name, ', ') WITHIN GROUP (ORDER BY c.column_position) AS column_names
-     , MAX(i.status) AS status
-     , MAX(i.tablespace_name) AS tablespace_name
+SELECT DECODE(generated, 'Y', 'Gen''d: ') || index_name AS index_name
+     , REPLACE(index_type, 'FUNCTION-BASED', 'FnB') AS index_type
+     , uniqueness
+     , (SELECT LISTAGG(c.column_name, ', ') WITHIN GROUP (ORDER BY c.column_position)
+        FROM user_ind_columns c
+        WHERE c.index_name = i.index_name) AS column_names
+     , status
+     , DECODE(partitioned, 'YES', 'Partitioned', tablespace_name) AS tablespace_name
 FROM user_indexes i
-   , user_ind_columns c
-WHERE i.table_name = UPPER('&1')
-  AND i.index_name = c.index_name(+)
-  --AND i.index_name = e.index_name(+)
-GROUP BY i.index_name, i.generated, i.status, i.tablespace_name;
+WHERE i.table_name = UPPER('&1');
 
 prompt Index Expressions:
 SELECT index_name
@@ -39,12 +37,13 @@ SELECT DECODE(i.generated, 'GENERATED NAME', 'Gen''d: ') || i.constraint_name AS
          i.index_owner || '.' || i.index_name
        ELSE NULL
        END AS using_index
-    ,  MAX(i.status) AS status
+     , MAX(i.status) AS status
+     , i.delete_rule
 FROM user_constraints i
    , user_cons_columns c
 WHERE i.table_name = UPPER('&1')
   AND i.constraint_name = c.constraint_name(+)
-GROUP BY i.constraint_name, i.generated, i.index_owner, i.index_name, i.status;
+GROUP BY i.constraint_name, i.generated, i.index_owner, i.index_name, i.status, i.delete_rule;
 
 prompt Constraint Expressions:
 SELECT i.constraint_name

@@ -270,6 +270,7 @@ function! s:Match_wrapper(word, forward, mode) range
   else
     execute "if " . skip . "| let skip = '0' | endif"
   endif
+
   let sp_return = searchpair(ini, mid, fin, flag, skip)
   let final_position = "call cursor(" . line(".") . "," . col(".") . ")"
   " Restore cursor position and original screen.

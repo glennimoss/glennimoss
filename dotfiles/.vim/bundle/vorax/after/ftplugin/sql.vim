@@ -17,19 +17,20 @@ call utils.CreateBufferMappings()
 setlocal isk+=$
 setlocal isk+=#
 
-" matchit functionality 
+" Commented out... We like the global one better...
+" matchit functionality
 " Some standard expressions for use with the matchit strings
-let s:notend = '\%(\<end\s\+\)\@<!'
-let s:when_no_matched_or_others = '\%(\<when\>\%(\s\+\%(\%(\<not\>\s\+\)\?<matched\>\)\|\<others\>\)\@!\)'
-let s:or_replace = '\%(or\s\+replace\s\+\)\?'
+"let s:notend = '\%(\<end\s\+\)\@<!'
+"let s:when_no_matched_or_others = '\%(\<when\>\%(\s\+\%(\%(\<not\>\s\+\)\?<matched\>\)\|\<others\>\)\@!\)'
+"let s:or_replace = '\%(or\s\+replace\s\+\)\?'
 
 " Define patterns for the matchit macro
-let b:match_words =
-                \ '\(^\s*\)\@<=\(\<\%(for\|while\|loop\)\>.*\):'.
-                \ '\%(\<exit\>\|\<leave\>\|\<break\>\|\<continue\>\):'.
-                \ '\%(\<end\s\+\<loop\>\),' .
-                \ s:notend . '\<if\>:'.
-                \ '\<elsif\>\|\<elseif\>\|\<else\>:'.
-                \ '\<end\s\+if\>,'.
-                \ '\<begin\>:'.
-                \ '\%(\<end\>\s*\(\(\<if\>\|\<loop\>\)\@!.\)*$\),' 
+"let b:match_words =
+                "\ '\(^\s*\)\@<=\(\<\%(for\|while\|loop\)\>.*\):'.
+                "\ '\%(\<exit\>\|\<leave\>\|\<break\>\|\<continue\>\):'.
+                "\ '\%(\<end\s\+\<loop\>\),' .
+                "\ s:notend . '\<if\>:'.
+                "\ '\<elsif\>\|\<elseif\>\|\<else\>:'.
+                "\ '\<end\s\+if\>,'.
+                "\ '\<begin\>:'.
+                "\ '\%(\<end\>\s*\(\(\<if\>\|\<loop\>\)\@!.\)*$\),'

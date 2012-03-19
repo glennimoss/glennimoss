@@ -12,7 +12,7 @@ alias diff='diff -u'
 alias :e='vim'
 alias go='gnome-open'
 alias hexdump='hexdump -C'
-alias ack='ack-grep'
+alias ack='ack-grep --smart-case'
 
 # base conversions
 radix_conv () {

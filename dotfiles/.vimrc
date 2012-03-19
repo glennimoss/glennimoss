@@ -2,6 +2,9 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" Add .vimlocal to the runtimepath for local-specific configs
+set runtimepath^=~/.vimlocal
+
 call pathogen#infect()
 
 " allow backspacing over everything in insert mode
@@ -51,9 +54,6 @@ let &stl="%<%n %f %([%H%R%W%Y%M]%)%{'!'[&ff=='".&ff."']}%{'$'[!&list]}%{'~'[&pm=
 " Store all swap files in .vim/swap
 set dir=~/.vimswap//
 
-" Add .vimlocal to the runtimepath for local-specific configs
-set runtimepath^=~/.vimlocal
-
 if !has("gui_running")
   set term=builtin_xterm  " use xterm keyboard mappings
 endif
@@ -96,14 +96,14 @@ nnoremap Q gq
 nnoremap <silent><M-Right> :bn<CR>
 nnoremap <silent><M-Left> :bp<CR>
 
-" Backspace and - map to page up
-nnoremap - <PageUp>
-
 " Make p in Visual mode replace the selected text with the "" register.
 vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
 
 " Enter breaks a line
 nnoremap <Enter> i<CR><Esc>
+
+" Enter instert with paste on
+nmap <Leader>i :set paste<CR>i
 
 " for when you forget to sudo vim
 command! W w !sudo tee % > /dev/null
@@ -181,7 +181,7 @@ if has("autocmd")
     autocmd BufEnter * :syntax sync fromstart " ensure full syntax hilighting
 
     " underline current line in insert mode
-    autocmd InsertLeave * se nocul
+    autocmd InsertLeave * se nocul nopaste
     autocmd InsertEnter * se cul
 
     " java files
@@ -245,6 +245,8 @@ if has("autocmd")
   augroup END
 
 endif
+
+runtime vimrclocal.vim
 
 set t_RV=
 let g:sparkupNextMapping = '<c-l>'

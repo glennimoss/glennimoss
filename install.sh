@@ -16,6 +16,8 @@ for topdir in *; do
   if [[ -d $topdir ]]; then
     if [[ $topdir == 'dotfiles' ]]; then
       dir=$HOME
+    elif [[ ${topdir:0:1} == '_' ]]; then
+      dir=$HOME/.${topdir:1}
     else
       dir=$HOME/$topdir
     fi
@@ -41,7 +43,13 @@ for topdir in *; do
       fi
     done
     cd ..
+    rmdir --ignore-fail-on-non-empty $backup_dir
   fi
 done
+rmdir --ignore-fail-on-non-empty $HOME/home_backup
 
-echo Homedir\'s dotfiles are installed. Existing files are in ~/home_backup
+msg="Homedir\'s dotfiles are installed."
+if [[ -e $HOME/home_backup ]]; then
+  msg="$msg Existing files are in ~/home_backup"
+fi
+echo $msg

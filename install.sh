@@ -48,6 +48,10 @@ for topdir in *; do
 done
 rmdir --ignore-fail-on-non-empty $HOME/home_backup
 
+if [[ ! -e $HOME/.vimswap ]]; then
+  mkdir $HOME/.vimswap
+fi
+
 msg="Homedir's dotfiles are installed."
 if [[ -e $HOME/home_backup ]]; then
   msg="$msg Existing files are in ~/home_backup"

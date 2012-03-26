@@ -34,7 +34,7 @@ for topdir in *; do
         srcfile=$(pwd)/$file
         destfile=$dir/$file
         if [[ -e $destfile ]]; then
-          if [[ $(realpath "$destfile") == $srcfile ]]; then
+          if [[ $(readlink -f "$destfile") == $srcfile ]]; then
             continue
           fi
           mv $destfile $backup_dir

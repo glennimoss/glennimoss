@@ -33,10 +33,10 @@ for topdir in *; do
       if [[ $file != '.' && $file != '..' && $file != '*' && $file != '.*' ]]; then
         srcfile=$(pwd)/$file
         destfile=$dir/$file
-        if [[ -e $destfile ]]; then
-          if [[ $(readlink -f "$destfile") == $srcfile ]]; then
-            continue
-          fi
+        if [[ $(readlink -f "$destfile") == $srcfile ]]; then
+          continue
+        fi
+        if [[ -e $destfile || -L $destfile ]]; then
           mv $destfile $backup_dir
         fi
         ln -s $srcfile $dir

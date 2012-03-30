@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ ! -e bin || ! -e dotfiles ]]; then
+if [[ ! -d bin || ! -d dotfiles ]]; then
   echo This must be run from the directory of this script.
   exit 1
 fi
@@ -30,7 +30,9 @@ for topdir in *; do
 
     cd $topdir
     for file in * .*; do
-      if [[ $file != '.' && $file != '..' && $file != '*' && $file != '.*' ]]; then
+      if [[ $file == '_install.sh' ]]; then
+        source _install.sh
+      elif [[ $file != '.' && $file != '..' && $file != '*' && $file != '.*' ]]; then
         srcfile=$(pwd)/$file
         destfile=$dir/$file
         if [[ $(readlink -f "$destfile") == $srcfile ]]; then
@@ -47,10 +49,6 @@ for topdir in *; do
   fi
 done
 rmdir --ignore-fail-on-non-empty $HOME/home_backup
-
-if [[ ! -e $HOME/.vimswap ]]; then
-  mkdir $HOME/.vimswap
-fi
 
 msg="Homedir's dotfiles are installed."
 if [[ -e $HOME/home_backup ]]; then

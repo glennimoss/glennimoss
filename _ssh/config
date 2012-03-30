@@ -1,0 +1,9 @@
+Host *
+  ForwardAgent    yes
+  ForwardX11      no
+  Protocol        2,1
+  ControlMaster   auto
+  ControlPath     ~/.ssh/sockets/%r@%h:%p
+  KeepAlive       yes
+  ServerAliveInterval 60
+

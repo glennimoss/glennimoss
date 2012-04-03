@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ ! -e bin || ! -e dotfiles ]]; then
+if [[ ! -d bin || ! -d dotfiles ]]; then
   echo This must be run from the directory of this script.
   exit 1
 fi
@@ -30,13 +30,15 @@ for topdir in *; do
 
     cd $topdir
     for file in * .*; do
-      if [[ $file != '.' && $file != '..' && $file != '*' && $file != '.*' ]]; then
+      if [[ $file == '_install.sh' ]]; then
+        source _install.sh
+      elif [[ $file != '.' && $file != '..' && $file != '*' && $file != '.*' ]]; then
         srcfile=$(pwd)/$file
         destfile=$dir/$file
-        if [[ -e $destfile ]]; then
-          if [[ $(readlink -f "$destfile") == $srcfile ]]; then
-            continue
-          fi
+        if [[ $(readlink -f "$destfile") == $srcfile ]]; then
+          continue
+        fi
+        if [[ -e $destfile || -L $destfile ]]; then
           mv $destfile $backup_dir
         fi
         ln -s $srcfile $dir

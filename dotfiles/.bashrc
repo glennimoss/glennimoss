@@ -12,7 +12,9 @@ if [ -d "${HOME}/bin" ] ; then
   export PATH
 fi
 
-export JAVA_HOME=/usr/lib/jvm/java-6-sun
+JAVA_HOME=$(readlink -f /usr/bin/java)
+JAVA_HOME=${JAVA_HOME%%/jre/*}
+export JAVA_HOME
 
 # Sort things sensibly
 export LC_COLLATE=POSIX

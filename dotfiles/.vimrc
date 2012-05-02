@@ -52,7 +52,9 @@ let &stl="%<%n %f %([%H%R%W%Y%M]%)%{'!'[&ff=='".&ff."']}%{'$'[!&list]}%{'~'[&pm=
 " Store all swap files in .vim/swap
 set dir=~/.vimswap//
 
-if !has("gui_running")
+if has("gui_running")
+  set mousemodel=popup_setpos
+else
   set term=builtin_xterm  " use xterm keyboard mappings
 endif
 

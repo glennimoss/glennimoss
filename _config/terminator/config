@@ -61,7 +61,7 @@
       parent = paneTop
       position = 703
     [[[termRemoteVim]]]
-      profile = default_no_scrollbar
+      #profile = default_no_scrollbar
       type = Terminal
       order = 0
       parent = paneRemote

@@ -5,8 +5,6 @@ set nocompatible
 " Add .vimlocal to the runtimepath for local-specific configs
 set runtimepath^=~/.vimlocal
 
-call pathogen#infect()
-
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
@@ -132,6 +130,10 @@ if has("vertsplit")
   set eadirection=ver
 end
 
+runtime vimrclocal.vim
+
+call pathogen#infect()
+
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,
 " 'cindent' is on in C files, etc.
@@ -245,8 +247,6 @@ if has("autocmd")
   augroup END
 
 endif
-
-runtime vimrclocal.vim
 
 set t_RV=
 let g:sparkupNextMapping = '<c-l>'

@@ -1,2 +1,3 @@
 --smart-case
 --type-set=tmpl=.tmpl
+--type-set=stg=.stg

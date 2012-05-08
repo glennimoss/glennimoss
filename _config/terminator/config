@@ -1,10 +1,9 @@
 [global_config]
-  handle_size = 0
-  enabled_plugins = ActivityWatch, TerminalShot, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   dbus = True
-  focus = mouse
-  borderless = True
+  enabled_plugins = ActivityWatch, TerminalShot, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   title_transmit_bg_color = "#4e9a06"
+  handle_size = 0
+  focus = mouse
 [keybindings]
   go_up = <Alt>k
   split_horiz = <Control><Alt>minus
@@ -48,7 +47,7 @@
       type = HPaned
       order = 0
       parent = window0
-      position = 798
+      #position = 798
     [[[termLocal]]]
       profile = default
       type = Terminal
@@ -59,7 +58,7 @@
       type = VPaned
       order = 1
       parent = paneTop
-      position = 703
+      #position = 703
     [[[termRemoteVim]]]
       #profile = default_no_scrollbar
       type = Terminal

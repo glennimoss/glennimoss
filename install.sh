@@ -12,7 +12,13 @@ fi
 
 mkdir $HOME/home_backup
 
-for topdir in *; do
+# Save current extglob setting
+old_extglob=$(shopt -p extglob)
+shopt -s extglob
+
+# Make dotfiles come first, as some other _install.sh scripts may depend on the
+# configuration stored in dot files.
+for topdir in dotfiles !(dotfiles); do
   if [[ -d $topdir ]]; then
     if [[ $topdir == 'dotfiles' ]]; then
       dir=$HOME
@@ -49,6 +55,9 @@ for topdir in *; do
   fi
 done
 rmdir --ignore-fail-on-non-empty $HOME/home_backup
+
+# Reset extglob setting
+$old_extglob
 
 msg="Homedir's dotfiles are installed."
 if [[ -e $HOME/home_backup ]]; then

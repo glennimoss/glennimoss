@@ -60,7 +60,7 @@ let s:or_replace = '\%(or\s\+replace\s\+\)\?'
 "\ '\<begin\>:\%(\<end\>\s*' . s:notkeywordend . ';$\),'.
             "\ '\%('.s:when_no_matched_or_others.'\):'.
 let b:match_words =
-\ '\<begin\>:\%(\<end\>\s*' . s:notkeywordend . ';$\),'.
+\ '\<begin\>:\%(\<end\>\s*' . s:notkeywordend . ';\),'.
 \
             \ s:notend . '\<if\>:'.
             \ '\<elsif\>\|\<elseif\>\|\<else\>:'.
@@ -73,7 +73,7 @@ let b:match_words =
             \
             \ '\%('. s:notend . '\<case\>\):'.
             \ '\<when\>:' .
-            \ '\%(\<end\>\s*\%(\<case\>\s*;\|' . s:notkeywordend . '$\)\),' .
+            \ '\%(\<end\>\s*\%(\<case\>\s*;\|' . s:notkeywordend . '\)\),' .
             \
             \ '\<merge\>:' .
             \ '\<when\s\+not\s\+matched\>:' .

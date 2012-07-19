@@ -13,27 +13,18 @@
   go_left = <Alt>h
 [profiles]
   [[default]]
-    palette = "#000000:#aa0000:#00aa00:#aa5500:#0000aa:#aa00aa:#00aaaa:#aaaaaa:#555555:#ff5555:#55ff55:#ffff55:#5555ff:#ff55ff:#55ffff:#ffffff"
+    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
     visible_bell = True
+    word_chars = "-A-Za-z0-9,./?%&#_=+~"
     scrollback_lines = 20000
-    antialias = False
-    cursor_color = ""
-    foreground_color = "#ffffff"
-    scroll_on_output = False
-    exit_action = restart
-    word_chars = "-A-Za-z0-9,./?%&#_=+~"
-    allow_bold = False
-  [[default_no_scrollbar]]
-    palette = "#000000:#aa0000:#00aa00:#aa5500:#0000aa:#aa00aa:#00aaaa:#aaaaaa:#555555:#ff5555:#55ff55:#ffff55:#5555ff:#ff55ff:#55ffff:#ffffff"
-    visible_bell = True
-    scrollback_lines = 10000
-    scrollbar_position = disabled
-    cursor_color = ""
-    foreground_color = "#ffffff"
+    use_system_font = False
+    font = ProggyTinyGIM Medium Semi-Condensed 12
+    cursor_color = "#93a1a1"
+    foreground_color = "#657b83"
+    background_color = "#002b36"
     scroll_on_output = False
     exit_action = restart
     antialias = False
-    word_chars = "-A-Za-z0-9,./?%&#_=+~"
     allow_bold = False
 [layouts]
   [[default]]
@@ -42,7 +33,7 @@
       type = Window
       order = 0
       parent = ""
-      size = 1280, 1024
+      #size = 1280, 1024
     [[[paneTop]]]
       type = HPaned
       order = 0
@@ -60,7 +51,6 @@
       parent = paneTop
       #position = 703
     [[[termRemoteVim]]]
-      #profile = default_no_scrollbar
       type = Terminal
       order = 0
       parent = paneRemote

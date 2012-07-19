@@ -59,7 +59,6 @@ else
 endif
 
 syntax on               " enable syntax highlighting
-color borland           " set color scheme
 
 set viewoptions=folds   " save flod state
 set foldmethod=marker   " fold at markers
@@ -135,6 +134,11 @@ end
 runtime vimrclocal.vim
 
 call pathogen#infect()
+
+"color borland           " set color scheme
+set background=dark
+set t_Co=16
+colorscheme solarized
 
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,

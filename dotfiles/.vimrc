@@ -138,7 +138,9 @@ call pathogen#infect()
 "color borland           " set color scheme
 set background=dark
 set t_Co=16
+let g:solarized_bold = 0
 colorscheme solarized
+
 
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,

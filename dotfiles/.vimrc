@@ -195,6 +195,9 @@ if has("autocmd")
     autocmd InsertLeave * se nocul nopaste
     autocmd InsertEnter * se cul
 
+    " Disable the C-C commenting and resote expected behavior in the cmdwin
+    autocmd CmdwinEnter * noremap <buffer> <C-C> <C-C>
+
     " java files
     let java_highlight_java_lang_ids=1
     let java_highlight_all=1

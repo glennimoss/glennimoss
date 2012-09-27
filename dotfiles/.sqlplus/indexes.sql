@@ -18,7 +18,8 @@ SELECT DECODE(generated, 'Y', 'Gen''d: ') || index_name AS index_name
      , status
      , DECODE(partitioned, 'YES', 'Partitioned', tablespace_name) AS tablespace_name
 FROM user_indexes i
-WHERE i.table_name = UPPER('&1');
+WHERE i.table_name = UPPER('&1')
+ORDER BY index_name;
 
 prompt Index Expressions:
 SELECT index_name
@@ -43,7 +44,8 @@ FROM user_constraints i
    , user_cons_columns c
 WHERE i.table_name = UPPER('&1')
   AND i.constraint_name = c.constraint_name(+)
-GROUP BY i.constraint_name, i.generated, i.index_owner, i.index_name, i.status, i.delete_rule;
+GROUP BY i.constraint_name, i.generated, i.index_owner, i.index_name, i.status, i.delete_rule
+ORDER BY constraint_name;
 
 prompt Constraint Expressions:
 SELECT i.constraint_name

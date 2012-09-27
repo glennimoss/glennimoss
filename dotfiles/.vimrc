@@ -139,6 +139,7 @@ call pathogen#infect()
 set background=dark
 set t_Co=16
 let g:solarized_bold = 0
+let g:solarized_italic = 0
 colorscheme solarized
 
 

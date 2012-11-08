@@ -13,6 +13,7 @@ alias :e='vim'
 alias go='gnome-open'
 alias hexdump='hexdump -C'
 alias ack='ack-grep'
+alias info='info --vi-keys'
 
 # base conversions
 radix_conv () {

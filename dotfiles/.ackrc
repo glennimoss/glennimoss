@@ -2,3 +2,5 @@
 --type-set=tmpl=.tmpl
 --type-set=stg=.stg
 --type-set=g=.g
+--type-set=kss=.kss
+--type-set=coffee=.coffee

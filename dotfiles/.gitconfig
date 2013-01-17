@@ -6,6 +6,6 @@
 #  name = ...
 #  email = ...
 [alias]
-  ll = log --graph --decorate --abbrev-commit
+  ll = log --graph --decorate --abbrev-commit --stat
   st = status
   diffw = diff --color-words

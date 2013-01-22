@@ -2,10 +2,12 @@
 	diff = auto
 	status = auto
 	branch = auto
-#[user]
-#  name = ...
-#  email = ...
 [alias]
   ll = log --graph --decorate --abbrev-commit --stat
   st = status
   diffw = diff --color-words
+#[user]
+#  name = ...
+#  email = ...
+[include]
+  path = .gitconfiglocal

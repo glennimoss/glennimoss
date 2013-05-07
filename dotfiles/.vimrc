@@ -8,41 +8,43 @@ set runtimepath^=~/.vimlocal
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-set autoread            " read changed files, if no unsaved changes
 set autochdir           " cd to the directory of the file in the active buffer
-set so=5                " always have 5 lines above or below the cursor
 set autoindent          " always set autoindenting on
-set smartindent         " be smart about indenting new lines
-set nobackup            " don't keep a backup file
-set viminfo=%,'10,<100,f1,:20,n~/.viminfo
-set history=50          " keep 50 lines of command line history
-set ruler               " show the cursor position all the time
+set autoread            " read changed files, if no unsaved changes
 set ffs=unix,dos,mac    " preferred file format order
-set showmatch           " highlight matching brackets
-set mat=5               " tenths of a second to blink matching brackets
-set showcmd             " display incomplete commands
-set incsearch           " do incremental searching
-set ignorecase          " ignore case when searching
-set smartcase           " don't ignore case if pattern contains uppercase
+set fillchars=vert:\ ,stl:\ ,stlnc:\  "no funny fill chars in splitters
+set formatoptions+=r    " add comment formatting stuff
 set hidden              " Allow hiding dirty buffers
-set visualbell          " don't beep, flash
-set t_vb=1              " ditto
+set history=50          " keep 50 lines of command line history
+set ignorecase          " ignore case when searching
+set incsearch           " do incremental searching
+set laststatus=2        " always show status line
+set lazyredraw          " don't redraw during macros
+set listchars=tab:\|-,trail:.,extends:>,precedes:<,eol:$
+set mat=5               " tenths of a second to blink matching brackets
+set nobackup            " don't keep a backup file
 set noerrorbells        " don't beep damn it
+set noicon              "
+set nostartofline       " don't jump from column to cloumn when changin lines
+set pastetoggle=<M-p>   " easy paste switch
+set report=0            " tell me when anything changes
+set ruler               " show the cursor position all the time
+set shellcmdflag=-lc    " Make :! be a login shell so .profile is read
+set shortmess=atI       " always show short messages
+set showcmd             " display incomplete commands
+set showmatch           " highlight matching brackets
+set smartcase           " don't ignore case if pattern contains uppercase
+set smartindent         " be smart about indenting new lines
+set so=5                " always have 5 lines above or below the cursor
+set spelllang=en_us
+set t_vb=1              " ditto
+set title               "
+set viminfo=%,'10,<100,f1,:20,n~/.viminfo
+set visualbell          " don't beep, flash
+set whichwrap=<,>,h,l   " let cursors movment wrap to next/previous line
 set wildmenu            " cool statusline tricks
 set wildmode=longest:full,full
-set fillchars=vert:\ ,stl:\ ,stlnc:\  "no funny fill chars in splitters
-set nostartofline       " don't jump from column to cloumn when changin lines
-set formatoptions+=r    " add comment formatting stuff
-set laststatus=2        " always show status line
-set shortmess=atI       " always show short messages
-set whichwrap=<,>,h,l   " let cursors movment wrap to next/previous line
-set pastetoggle=<M-p>   " easy paste switch
-set noicon              "
-set title               "
-set lazyredraw          " don't redraw during macros
-set report=0            " tell me when anything changes
-set listchars=tab:\|-,trail:.,extends:>,precedes:<,eol:$
-set shellcmdflag=-lc    " Make :! be a login shell so .profile is read
+
 " print format layout
 set printoptions=left:0.5in,right:0.5in,top:0.25in,bottom:0.5in,paper:letter
 " fancy status line
@@ -75,14 +77,17 @@ let mapleader = "\\"    " use \ as leader char (default, but be safe)
 inoremap kj <Esc>
 
 " Move around windows with one key combo
-nmap <A-h> <C-w>h
-nmap <A-l> <C-w>l
-nmap <A-j> <C-w>j
-nmap <A-k> <C-w>k
-nmap <C-h> <C-w>h
-nmap <C-l> <C-w>l
-nmap <C-j> <C-w>j
-nmap <C-k> <C-w>k
+nnoremap <A-h> <C-w>h
+nnoremap <A-l> <C-w>l
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+
+" Toggle spell checking
+nnoremap <silent> <Leader>s :setlocal spell!<CR>
 
 " Don't use Ex mode, use Q for formatting
 nnoremap Q gq
@@ -102,7 +107,7 @@ vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
 nnoremap <Enter> i<CR><Esc>
 
 " Enter instert with paste on
-nmap <Leader>i :set paste<CR>i
+nnoremap <Leader>i :set paste<CR>i
 
 " for when you forget to sudo vim
 command! W w !sudo tee % > /dev/null

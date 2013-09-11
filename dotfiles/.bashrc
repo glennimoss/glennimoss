@@ -12,6 +12,13 @@ if [ -d "${HOME}/bin" ] ; then
   export PATH
 fi
 
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
 JAVA_HOME=$(readlink -f /usr/bin/java)
 JAVA_HOME=${JAVA_HOME%%/jre/*}
 export JAVA_HOME
@@ -109,7 +116,11 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-  PS1='${debian_chroot:+($debian_chroot)}\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " (\[\033[02;32m\]%s\[\033[00m\])")\$ '
+  PS1='${debian_chroot:+($debian_chroot)}\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]'
+  if [[ $(type -t __git_ps1) == "function" ]]; then
+    PS1=$PS1'$(__git_ps1 " (\[\033[02;32m\]%s\[\033[00m\])")'
+  fi
+  PS1=$PS1'\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -134,13 +145,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
 fi
 
 #Don't log me out!

@@ -1,7 +1,9 @@
-SET ECHO OFF
-SET VERIFY OFF
-SET DEFINE ON
+SET echo off
+SET verify off
+SET define on
 
-SELECT &2, count(*) FROM &1 GROUP BY &2;
+SELECT &2, COUNT(*)
+FROM &1
+GROUP BY &2;
 
-SET VERIFY ON
+SET verify on

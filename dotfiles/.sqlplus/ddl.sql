@@ -1,6 +1,6 @@
-SET ECHO OFF
-SET VERIFY OFF
-SET DEFINE ON
+SET echo off
+SET verify off
+SET define on
 
 DECLARE
   l_obj k.t_string_array :=
@@ -8,8 +8,11 @@ DECLARE
   l_type k.string;
 BEGIN
   IF l_obj.count = 1 THEN
-    k.print('Specify the object with SCHEMA.OBJECT_NAME');
-    RETURN;
+    --k.print('Specify the object with SCHEMA.OBJECT_NAME');
+    --RETURN;
+
+    l_obj(2) := l_obj(1);
+    l_obj(1) := SYS_CONTEXT('userenv', 'current_schema');
   END IF;
   SELECT object_type
   INTO l_type
@@ -23,4 +26,4 @@ BEGIN
 END;
 /
 
-SET VERIFY ON
+SET verify on

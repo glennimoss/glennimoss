@@ -1,6 +1,6 @@
-SET ECHO OFF
-SET VERIFY OFF
-SET DEFINE ON
+SET echo off
+SET verify off
+SET define on
 COLUMN object_name FORMAT a30
 
 SELECT owner
@@ -9,4 +9,5 @@ SELECT owner
 FROM dba_objects
 WHERE LOWER(object_name) LIKE LOWER('%&1%');
 
-SET VERIFY ON
+COLUMN object_name CLEAR
+SET verify on

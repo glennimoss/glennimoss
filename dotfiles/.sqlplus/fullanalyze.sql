@@ -1,6 +1,6 @@
-SET ECHO OFF
-SET VERIFY OFF
-SET DEFINE ON
+SET echo off
+SET verify off
+SET define on
 
 DECLARE
   l_start NUMBER := k.time();
@@ -11,4 +11,4 @@ BEGIN
 END;
 /
 
-SET VERIFY ON
+SET verify on

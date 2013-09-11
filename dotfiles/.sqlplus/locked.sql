@@ -1,6 +1,6 @@
-column username format a20
-column sid format a10
-column object_name format a30
+COLUMN username    FORMAT a20
+COLUMN sid         FORMAT a10
+COLUMN object_name FORMAT a30
 
 SELECT s.username || ' (' || s.osuser || '@' || s.machine || ')' AS username
      , s.sid || ',' || s.serial# AS sid
@@ -24,4 +24,8 @@ WHERE v.object_id = d.object_id
   AND v.object_id = l.id1
   AND v.session_id = s.sid
 ORDER BY s.username, s.sid;
+
+COLUMN username    CLEAR
+COLUMN sid         CLEAR
+COLUMN object_name CLEAR
 

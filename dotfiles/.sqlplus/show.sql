@@ -1,10 +1,11 @@
-SET ECHO OFF
-SET VERIFY OFF
-SET DEFINE ON
+SET echo off
+SET verify off
+SET define on
 
-SELECT object_name AS "&1 NAME"
-FROM user_objects
-WHERE LOWER(object_type) LIKE LOWER('&1')
+SELECT object_name AS &1._name
+FROM all_objects
+WHERE owner = SYS_CONTEXT('userenv', 'current_schema')
+  AND LOWER(object_type) LIKE LOWER('&1')
 ORDER BY object_name;
 
-SET VERIFY ON
+SET verify on

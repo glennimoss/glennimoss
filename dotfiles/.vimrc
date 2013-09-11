@@ -249,7 +249,7 @@ if has("autocmd")
     " Need to postpone using "zv" until after reading the modelines.
     autocmd BufWinEnter *
           \ if exists("b:doopenfold") |
-          \   exe "normal zv" |
+          \   exe "normal! zv" |
           \   if(b:doopenfold > 1) |
           \       exe  "+".1 |
           \   endif |

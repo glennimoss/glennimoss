@@ -70,7 +70,7 @@ function! GetPlsqlIndent()
 
   " Indenting on the next line
 
-  " Add a 'shiftwidth' after begin, if, as, is, then, when, loop, else, 
+  " Add a 'shiftwidth' after begin, if, as, is, then, when, loop, else,
   " elsif, exception, declare
   " Skip if the line also contains the closure for the above
     if line =~ '\(begin\|case\|if\|as\|is\s*$\|then\|when\|loop\|else\|elsif\|exception\|declare\)\>'
@@ -98,7 +98,7 @@ function! GetPlsqlIndent()
   " as, is, or declare
   " This seems to handle the case of inline subprograms. YMMV!
     if cline =~ '^\s*\(begin\)\>'
-      normal 0
+      normal! 0
       if searchpair('\<declare\|is\|as\>',"",'\<begin\>',"br") > 0
         let ind = ind - &sw
       endif
@@ -107,7 +107,7 @@ function! GetPlsqlIndent()
   " Attempt proper unindent for any sort of an end statement such as
   " begin..end, if..end if, for...end loop, while...end loop
     if cline =~ '^\s*\(end\)\>'
-      normal 0
+      normal! 0
       let oldind = ind
       let ind = indent(searchpair('\<begin\|if\|for\|while\>', '', '\<end\>', 'bW'))
       if ind == oldind

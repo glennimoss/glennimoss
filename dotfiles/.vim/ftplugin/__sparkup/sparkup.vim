@@ -68,7 +68,7 @@ function! s:SparkupNext()
     if n == 3
         startinsert!
     else
-        execute 'normal l'
+        execute 'normal! l'
         startinsert
     endif
 endfunction

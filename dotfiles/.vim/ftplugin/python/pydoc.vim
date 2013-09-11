@@ -92,7 +92,7 @@ function! ShowPyDoc(name, type)
     setlocal noswapfile
     set buftype=nofile
     setlocal modifiable
-    normal ggdG
+    normal! ggdG
     " remove function/method arguments
     let s:name2 = substitute(a:name, '(.*', '', 'g' )
     " remove all colons
@@ -104,7 +104,7 @@ function! ShowPyDoc(name, type)
     endif
     setlocal nomodified
     set filetype=man
-    normal 1G
+    normal! 1G
 
     if exists('l:pydoc_wh')
         execute "silent resize " . l:pydoc_wh
@@ -122,7 +122,7 @@ function! ShowPyDoc(name, type)
         if l:buf_is_new
             execute "bd!"
         else
-            normal u
+            normal! u
         endif
         redraw
         echohl WarningMsg | echo l:line | echohl None

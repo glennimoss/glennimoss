@@ -3,7 +3,7 @@
 	status = auto
 	branch = auto
 [alias]
-  ll = log --graph --decorate --abbrev-commit --stat
+  ll = log --graph --decorate --abbrev-commit --stat -M
   st = status
   diffw = diff --color-words
   ready = rebase -i @{u}
@@ -12,3 +12,5 @@
 #  email = ...
 [include]
   path = .gitconfiglocal
+[diff]
+	renames = true

@@ -56,17 +56,9 @@ dtob () {
   maybe_stdin radix_conv 10 2 "$@"
 }
 
-
-$(grep --help 2>/dev/null | grep -- --color >/dev/null) && {
-  #colorize grep matches with a nice yellow
-  # the LANG=C makes grep deal with multibyte chars better
-  alias grep='GREP_COLOR="1;33" LANG=C grep --color=auto --exclude-dir=.svn';
-} || {
-  # the LANG=C makes grep deal with multibyte chars better
-  alias grep='LANG=C grep --exclude-dir=.svn';
-}
-
 alias phing="phing -find build.xml"
+
+alias sqlplus="$HOME/.sqlplus/sqlplus.sh"
 
 function svnpropdiff {
   if (( $# == 0 )); then
@@ -85,8 +77,22 @@ function svnpropdiff {
 # If not running interactively, don't do anything more
 [[ $- =~ i ]] || return
 
-$(ls --help 2>/dev/null | grep -- --color= >/dev/null) && {
-  alias ls='ls -bF --color=auto' #yea! color!
-}
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls -bF --color=auto'
 
-alias sqlplus="$HOME/.sqlplus/sqlplus.sh"
+fi
+
+$(grep --help 2>/dev/null | grep -- --color >/dev/null) && {
+  #colorize grep matches with a nice yellow
+  # the LANG=C makes grep deal with multibyte chars better
+  alias grep='GREP_COLOR="1;33" LANG=C grep --color=auto'
+  alias fgrep='GREP_COLOR="1;33" LANG=C fgrep --color=auto'
+  alias egrep='GREP_COLOR="1;33" LANG=C egrep --color=auto'
+} || {
+  # the LANG=C makes grep deal with multibyte chars better
+  alias grep='LANG=C grep'
+  alias fgrep='LANG=C fgrep'
+  alias egrep='LANG=C egrep'
+}

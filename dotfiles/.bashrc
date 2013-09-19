@@ -135,7 +135,7 @@ xterm*|rxvt*)
     ;;
 esac
 
-export GREP_OPTIONS="--exclude_dir=.svn"
+export GREP_OPTIONS="--exclude-dir=.svn"
 
 #Don't log me out!
 unset TMOUT

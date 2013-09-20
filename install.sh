@@ -40,6 +40,9 @@ for topdir in dotfiles !(dotfiles); do
         source _install.sh
       elif [[ $file != '.' && $file != '..' && $file != '*' && $file != '.*' ]]; then
         srcfile=$(pwd)/$file
+        if [[ -L $srcfile ]]; then
+          srcfile=$(readlink -f "$srcfile")
+        fi
         destfile=$dir/$file
         if [[ $(readlink -f "$destfile") == $srcfile ]]; then
           continue
@@ -47,7 +50,7 @@ for topdir in dotfiles !(dotfiles); do
         if [[ -e $destfile || -L $destfile ]]; then
           mv $destfile $backup_dir
         fi
-        ln -s $srcfile $dir
+        ln -s $srcfile $destfile
       fi
     done
     cd ..

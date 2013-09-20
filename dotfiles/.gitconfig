@@ -14,3 +14,5 @@
   path = .gitconfiglocal
 [diff]
 	renames = true
+[push]
+	default = simple

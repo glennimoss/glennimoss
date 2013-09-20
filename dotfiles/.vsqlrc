@@ -1,0 +1,23 @@
+\edit-mode vi
+\bind ^R history-search-backward  # tecla standard is redisplay
+
+\bind up history-search-backward
+\bind down history-search-forward
+\bind left cursor-left
+\bind right cursor-right
+
+\bind M-mm set-mark
+\bind M-`m exchange-point-and-mark
+\bind M-d`m kill-region
+\bind M-y`m copy-region-as-kill
+
+\bind M-guw downcase-word
+\bind M-gUw upcase-word
+
+\bind M-^? backward-delete-char
+
+\# gnome terminal
+\bind M-OH beginning-of-line
+\bind M-OF end-of-line
+
+\timing

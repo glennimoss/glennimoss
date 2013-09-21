@@ -36,10 +36,10 @@ for topdir in dotfiles !(dotfiles); do
 
     cd $topdir
     for file in * .*; do
+      srcfile=$(pwd)/$file
       if [[ $file == '_install.sh' ]]; then
-        source _install.sh
+        install_scripts[${#install_scripts[@]}]=$srcfile
       elif [[ $file != '.' && $file != '..' && $file != '*' && $file != '.*' ]]; then
-        srcfile=$(pwd)/$file
         if [[ -L $srcfile ]]; then
           srcfile=$(readlink -f "$srcfile")
         fi
@@ -57,6 +57,11 @@ for topdir in dotfiles !(dotfiles); do
     rmdir --ignore-fail-on-non-empty $backup_dir
   fi
 done
+
+for install_script in "${install_scripts[@]}"; do
+  source "$install_script"
+done
+
 rmdir --ignore-fail-on-non-empty $HOME/home_backup
 
 # Reset extglob setting
@@ -64,6 +69,7 @@ $old_extglob
 
 msg="Homedir's dotfiles are installed."
 if [[ -e $HOME/home_backup ]]; then
+
   msg="$msg Existing files are in ~/home_backup"
 fi
 echo $msg

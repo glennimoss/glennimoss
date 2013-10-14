@@ -87,9 +87,9 @@ fi
 $(grep --help 2>/dev/null | grep -- --color >/dev/null) && {
   #colorize grep matches with a nice yellow
   # the LANG=C makes grep deal with multibyte chars better
-  alias grep='GREP_COLOR="1;33" LANG=C grep --color=auto'
-  alias fgrep='GREP_COLOR="1;33" LANG=C fgrep --color=auto'
-  alias egrep='GREP_COLOR="1;33" LANG=C egrep --color=auto'
+  alias grep='LANG=C grep --color=auto'
+  alias fgrep='LANG=C fgrep --color=auto'
+  alias egrep='LANG=C egrep --color=auto'
 } || {
   # the LANG=C makes grep deal with multibyte chars better
   alias grep='LANG=C grep'

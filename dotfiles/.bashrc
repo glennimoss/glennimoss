@@ -15,8 +15,12 @@ fi
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+  fi
 fi
 
 JAVA_HOME=$(readlink -f /usr/bin/java)
@@ -29,10 +33,11 @@ export LC_COLLATE=POSIX
 #Oracle
 export SQLPATH=${SQLPATH}${SQLPATH:+:}.:$HOME/.sqlplus
 export TNS_ADMIN=/etc/oracle
-ORACLE_HOME=/usr/lib/oracle/11.2/client64
-if [[ ! -d $ORACLE_HOME ]]; then
-  ORACLE_HOME=/usr/lib/oracle/11.1/client64
-fi
+for d in /usr/lib/oracle/*; do
+  ORACLE_HOME=$d/client64
+  # We want to loop over anyting found, so we get the latest (Which would be
+  # lexicographically the last item)
+done
 export ORACLE_HOME
 export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
 

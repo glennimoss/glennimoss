@@ -1,0 +1,21 @@
+#!/bin/bash
+
+for g in 0 10; do
+  txt=XXXXXX
+  inv_opts="27 07"
+  if [[ $g == 10 ]]; then
+    txt="      "
+    inv_opts="27"
+  fi
+
+  for code in {30..37} 39; do
+    for inv in $inv_opts; do
+      for int in 22 01 02; do
+        c=$(($code + $g))
+        echo -en Inv: $inv Int: $int Code: $c '\E['$inv';'$int';'$c'm'"$txt"
+        tput sgr0
+        echo
+      done
+    done
+  done
+done

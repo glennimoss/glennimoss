@@ -1,16 +1,73 @@
 #!/bin/bash
 
+
+function usage () {
+  echo Usage: $0 [--int INTENSITY] [--no-inv]
+  echo
+  echo optional arguments:
+  echo "  -h, --help        Display this help message."
+  echo "  --int INTENSITY   Display only intensity of INTENSITY."
+  echo "                    Normal intensity is 22, high intensity is 1, and low intensity is 2."
+  echo "  --no-inv          Don't display inverse combinations."
+  exit $1
+}
+
+params="$(getopt -o h -l help,int:,no-inv --name "$(basename "$0")" -- "$@")"
+
+if [ $? -ne 0 ]
+then
+  usage 1
+fi
+
+eval set -- "$params"
+unset params
+
+
+int_opts="22 01 02"
+inv_opts="27 07"
+
+while [[ "$1" ]]; do
+  case $1 in
+    --int)
+      int=$(($2))
+      if (( int != 22 && int != 1 && int != 2)); then
+        echo "INTENSITY value $int in invalid. Must be one of: normal intensity, 22; high intensity, 1; low intensity, 2."
+        usage 3
+      fi
+      int_opts=$int
+      shift 2
+      ;;
+    --no-inv)
+      inv_opts="27"
+      shift
+      ;;
+    -h|--help)
+      usage 0
+      ;;
+    --)
+      break
+      ;;
+    *)
+      echo Arg was [$1]
+      usage 2
+      ;;
+  esac
+done
+
+
 for g in 0 10; do
   txt=XXXXXX
-  inv_opts="27 07"
   if [[ $g == 10 ]]; then
     txt="      "
-    inv_opts="27"
   fi
 
   for code in {30..37} 39; do
     for inv in $inv_opts; do
-      for int in 22 01 02; do
+      if (( $inv == 7 && $g == 10 )); then
+        continue
+      fi
+
+      for int in $int_opts; do
         c=$(($code + $g))
         echo -en Inv: $inv Int: $int Code: $c '\E['$inv';'$int';'$c'm'"$txt"
         tput sgr0

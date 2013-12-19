@@ -7,7 +7,7 @@ fi
 
 if [[ $(which rlwrap) ]]; then
   touch $HOME/.sqlplus/history
-  SQLPLUS="rlwrap -f $HOME/.sqlplus/sql_reserved.dict -f $HOME/.sqlplus/history -r -H $HOME/.sqlplus/history $SQLPLUS"
+  SQLPLUS="rlwrap -f $HOME/.sqlplus/sql_reserved.dict -f $HOME/.sqlplus/history -r -H $HOME/.sqlplus/history --histsize 30000 $SQLPLUS"
 fi
 
 SCRATCH=$HOME/.sqlplus/scratch${$}.sql

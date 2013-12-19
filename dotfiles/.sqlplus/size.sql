@@ -2,6 +2,12 @@ SET echo off
 SET verify off
 SET define on
 
+SET feedback off
+COLUMN var_out NEW_VALUE 2
+SELECT '' AS var_out FROM dual WHERE 1=0;
+SET feedback on
+COLUMN var_out CLEAR
+
 COLUMN owner        FORMAT a9
 COLUMN segment_name FORMAT a30
 COLUMN segment_type FORMAT a10
@@ -21,10 +27,12 @@ SELECT owner
      , SUM(bytes)/1024/1024 as MB
      , SUM(bytes)/1024/1024/1024 as GB
 FROM dba_segments
-WHERE (owner = SYS_CONTEXT('userenv', 'current_schema')
-  AND segment_name LIKE UPPER('&1%'))
-   OR owner || '.' || segment_name LIKE UPPER('&1%')
-GROUP BY owner, segment_name, segment_type;
+WHERE ((owner = SYS_CONTEXT('userenv', 'current_schema')
+    AND REGEXP_LIKE(segment_name, '^&1', 'i'))
+     OR REGEXP_LIKE(owner || '.' || segment_name, '^&1', 'i'))
+  AND LOWER(segment_type) LIKE LOWER('%&2%')
+GROUP BY owner, segment_name, segment_type
+ORDER BY segment_name, segment_type;
 
 
 COLUMN owner        CLEAR

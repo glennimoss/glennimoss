@@ -75,7 +75,7 @@ function svnpropdiff {
 }
 
 # If not running interactively, don't do anything more
-[[ $- =~ i ]] || return
+[[ $- =~ i ]] || return 0
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then

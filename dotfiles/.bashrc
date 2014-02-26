@@ -61,7 +61,12 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 # If not running interactively, don't do anything more
-[[ $- =~ i ]] || return
+# We use the : command to force a return code of 0
+# otherwise "ssh host 'exit'" return a status code of 1
+# It seems that the return 0 isn't really evaluated when
+# the .bashrc file is evaluating before a command executed
+# by ssh.
+[[ $- =~ i ]] || { : ; return 0 ; }
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.

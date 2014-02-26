@@ -64,7 +64,7 @@ public class InstallCert {
 		file = new File(dir, "cacerts");
 	    }
 	}
-	System.out.println("Loading KeyStore " + file + "...");
+	System.out.println("Loading KeyStore " + file);
 	InputStream in = new FileInputStream(file);
 	KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 	ks.load(in, passphrase);
@@ -168,7 +168,7 @@ public class InstallCert {
 	}
 
 	public X509Certificate[] getAcceptedIssuers() {
-	    throw new UnsupportedOperationException();
+          return new X509Certificate[0];
 	}
 
 	public void checkClientTrusted(X509Certificate[] chain, String authType)

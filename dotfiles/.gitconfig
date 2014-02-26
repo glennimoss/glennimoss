@@ -7,6 +7,7 @@
   st = status
   diffw = diff --color-words
   ready = rebase -i @{u}
+  root = !pwd
 #[user]
 #  name = ...
 #  email = ...

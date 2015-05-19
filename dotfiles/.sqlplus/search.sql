@@ -13,6 +13,7 @@ SELECT object_name
 FROM all_objects
 WHERE owner = SYS_CONTEXT('userenv', 'current_schema')
   AND LOWER(object_name) LIKE LOWER('%&1%')
-  AND LOWER(object_type) LIKE LOWER('%&2%');
+  AND ('&2' IS NULL
+    OR LOWER(object_type) = LOWER('&2'));
 
 SET verify on

@@ -8,6 +8,7 @@ SET feedback on
 SET heading on
 SET trimspool off
 SET newpage 1
+SET timing on
 ALTER SESSION SET nls_date_format="YYYY-MM-DD HH24:MI:SS";
 ALTER SESSION SET nls_timestamp_format="YYYY-MM-DD HH24:MI:SSXFF";
 

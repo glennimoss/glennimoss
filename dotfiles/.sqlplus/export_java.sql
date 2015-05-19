@@ -13,6 +13,7 @@ SET newpage 0
 SET null ""
 SET pagesize 0
 SET trimspool on
+SET timing off
 SET verify off
 
 -- send output to file

@@ -2,6 +2,8 @@ SET echo off
 SET verify off
 SET define on
 
+describe &1
+
 COLUMN index_type         FORMAT a10
 COLUMN column_names       FORMAT a30
 COLUMN column_name        FORMAT a30
@@ -41,7 +43,7 @@ SELECT DECODE(i.generated, 'GENERATED NAME', 'Gen''d: ') || i.constraint_name AS
      --, search_condition
      , LISTAGG(c.column_name, ', ') WITHIN GROUP (ORDER BY c.position) AS column_names
      , CASE WHEN i.index_name IS NOT NULL THEN
-         i.index_owner || '.' || i.index_name
+         COALESCE(i.index_owner, i.owner) || '.' || i.index_name
        ELSE NULL
        END AS using_index
      , MAX(i.status) AS status
@@ -53,7 +55,7 @@ WHERE ((i.owner = SYS_CONTEXT('userenv', 'current_schema')
    OR i.owner || '.' || i.table_name = UPPER('&1'))
   AND i.constraint_name = c.constraint_name(+)
   AND i.owner = c.owner(+)
-GROUP BY i.constraint_name, i.generated, i.index_owner, i.index_name, i.status, i.delete_rule
+GROUP BY i.constraint_name, i.generated, i.owner, i.index_owner, i.index_name, i.status, i.delete_rule
 ORDER BY constraint_name;
 
 PROMPT Constraint Expressions:

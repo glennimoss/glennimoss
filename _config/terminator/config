@@ -2,7 +2,7 @@
   dbus = True
   enabled_plugins = ActivityWatch, TerminalShot, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   title_transmit_bg_color = "#4e9a06"
-  handle_size = 0
+  handle_size = 1
   focus = mouse
   inactive_color_offset = 1.0
 [keybindings]
@@ -20,7 +20,7 @@
     word_chars = "-A-Za-z0-9,./?%&#_=+~"
     scrollback_lines = 20000
     use_system_font = False
-    font = ProggyTinyGIM Medium Semi-Condensed 12
+    font = ProggyTinyGIM Medium Semi-Condensed 10
     cursor_color = "#93a1a1"
     foreground_color = "#657b83"
     background_color = "#002b36"

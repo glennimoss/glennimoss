@@ -4,9 +4,12 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 remote=$(git config branch.${branch}.remote)
 
 if [[ $remote == "." ]]; then
-  git checkout $(git rev-parse --abbrev-ref @{upstream})
-  git pullr 
-  git checkout ${branch}
+  upstream=$(git rev-parse --abbrev-ref @{upstream})
+  if [[ $(git config branch.${upstream}.remote) != "" ]]; then
+    git checkout $upstream
+    git pullr
+    git checkout ${branch}
+  fi
 fi
 
 git pull --rebase

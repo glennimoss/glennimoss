@@ -147,5 +147,20 @@ esac
 
 export GREP_OPTIONS="--exclude-dir=.svn"
 
+# Better less defaults
+export LESS=-FRXsS
+
 #Don't log me out!
 unset TMOUT
+
+# Random envvars:
+export SLANT_COLOUR_7=aaa9a5 SLANT_PRESETS="130x73 Hard:130x73dh"
+export NET_COLOUR_4=000000
+export NET_COLOUR_5=000000
+
+# deb packaging stuff:
+export DEBFULLNAME="Glenn Moss"
+export DEBEMAIL="glennimoss+launchpad@gmail.com"
+
+# Python rc
+export PYTHONSTARTUP=~/.pythonrc.py

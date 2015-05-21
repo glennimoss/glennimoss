@@ -20,4 +20,9 @@
 \bind M-OH beginning-of-line
 \bind M-OF end-of-line
 
+\pset null {NULL}
+
+\set PROMPT1 '%/@%m%R%# '
+\set PROMPT2 '%/@%m%R%# '
+
 \timing

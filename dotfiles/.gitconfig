@@ -5,9 +5,11 @@
 [alias]
   ll = log --graph --decorate --abbrev-commit --stat -M
   st = status
-  diffw = diff --color-words
+  diffw = diff --color-words='\\w+|.'
+  diffchars = diff --color-words=.
   ready = rebase -i @{u}
-  root = !pwd
+  root = rev-parse --show-toplevel
+  br = branch -vv
 #[user]
 #  name = ...
 #  email = ...
@@ -17,3 +19,7 @@
 	renames = true
 [push]
 	default = simple
+[grep]
+	patternType = perl
+[core]
+	pager = less -S

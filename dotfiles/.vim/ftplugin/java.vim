@@ -1,3 +1,3 @@
 " Save, compile and run java file
-command! RunJava w|!javac -cp '*:.' % && java -cp '*:.' %:r
+command! RunJava up|!javac -cp '*:.' % && java -cp '*:.' %:r
 

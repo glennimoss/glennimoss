@@ -64,14 +64,17 @@ for topdir in dotfiles !(dotfiles); do
           ;;
       esac
     done
+    ignore+=(.gitignore)
 
     for file in !(.|..|_*); do
-      process=1
-      for pat in "${ignore[@]}"; do
-        if [[ $file == $pat ]]; then
-          process=0
-        fi
-      done
+      git check-ignore -q $file; process=$? # Returns 0 if the file is ignored, or 1 otherwise
+      if (( $process )); then
+        for pat in "${ignore[@]}"; do
+          if [[ $file == $pat ]]; then
+            process=0
+          fi
+        done
+      fi
       process=$(( $process && ! ${#whitelist[@]} ))
       for pat in "${whitelist[@]}"; do
         if [[ $file == $pat ]]; then

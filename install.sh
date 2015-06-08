@@ -1,131 +1,201 @@
 #!/bin/bash
 
-is () {
-  return $1
-}
+ROOT=$(dirname $(readlink -f $0))
+cd $ROOT
+
+source lib/bash/logging.sh
+source lib/bash/logic.sh
+
+LOG_THRESHOLD=${LOG_LEVEL[INFO]}
+#LOG_THRESHOLD=${LOG_LEVEL[TRACE]}
 
 if [[ -e $HOME/home_backup ]]; then
-  echo $HOME/home_backup already exists. Deal with it before running this.
+  log_error "$HOME/home_backup already exists. Deal with it before running this."
   exit 1
 fi
 
-mkdir "$HOME/home_backup"
-
 shopt -s extglob nullglob
 
-cd $(dirname $(readlink -f $0))
+make_destname () {
+  if [[ ! $1 ]]; then
+    return
+  fi
+
+  local dir=$(dirname "$1")
+  local base=$(basename "$1")
+
+  if [[ ${base:0:1} == '_' ]]; then
+    base=.${base:1}
+  fi
+
+  if [[ $dir != '.' ]]; then
+    base=$(make_destname "$dir")/$base
+  fi
+
+
+  echo "$base"
+}
+
+
+install () {
+  local recursive_depth=0
+  local recursive=false
+  if [[ $1 == -r* ]]; then
+    recursive=true
+    recursive_depth=${1#-r}
+    shift
+  fi
+
+  local srcroot=$1
+  local destroot=${2-$(make_destname $1)}
+  local backup_dir=$HOME/home_backup/$destroot
+
+  log_debug "install: recursive=$recursive (depth: $recursive_depth) srcroot=$srcroot destroot=$destroot"
+
+  local ignore=()
+  local whitelist=()
+  local srcfile
+
+  pushd "$ROOT/$srcroot" >/dev/null
+  local srcdir=$(pwd)
+  local destdir=$HOME/$destroot
+  log_debug "srcdir=$srcdir desdir=$destdir"
+  for file in _*; do
+    srcfile=$srcdir/$file
+    case $file in
+      _install.sh)
+        install_scripts+=("$srcfile")
+        ;;
+      _ignore)
+        if (( ${#whitelist[@]} )); then
+          log_warning "WARNING: You probably shouldn't use both $srcroot/_ignore and $srcroot/_whitelist"
+        fi
+        mapfile -t ignore < $srcfile
+        ;;
+      _whitelist)
+        if (( ${#ignore[@]} )); then
+          log_warning "WARNING: You probably shouldn't use both $srcroot/_ignore and $srcroot/_whitelist"
+        fi
+        mapfile -t whitelist < $srcfile
+        ;;
+      __pycache__)
+        # ignored
+        ;;
+      *)
+        log_warning "Unknown special file $file"
+        ;;
+    esac
+  done
+  ignore+=(.gitignore)
+
+  for file in !(.|..|_*); do
+    log_trace "looking at $file"
+    #git check-ignore -q $file; local process=$? # Returns 0 if the file is ignored, or 1 otherwise
+    local process=$(git check-ignore -q $file; notbool) # Returns 0 if the file is ignored, or 1 otherwise
+    #if (( $process )); then
+    if $process; then
+      for pat in "${ignore[@]}"; do
+        if [[ $file == $pat ]]; then
+          #process=0
+          process=false
+          log_debug "Blacklisted: $file"
+        fi
+      done
+    fi
+    #process=$(( $process && ! ${#whitelist[@]} ))
+    process=$( $process && (( ! ${#whitelist[@]} )); bool)
+    for pat in "${whitelist[@]}"; do
+      if [[ $file == $pat ]]; then
+        #process=1
+        process=true
+        log_debug "Whitelisted: $file"
+        break
+      fi
+    done
+
+    srcfile=$srcdir/$file
+    if [[ -L $srcfile ]]; then
+      srcfile=$(readlink -f "$srcfile")
+    fi
+    local destfile=$destdir/$file
+    local already_linked=$([[ $(readlink -f "$destfile") == $srcfile ]]; bool)
+
+    if [[ -d $srcfile ]] && $recursive; then
+      # Remove existing shallow linking
+      if $already_linked; then
+        command_log_trace rm "$destfile"
+      fi
+
+      install -r$(( $recursive_depth + 1 )) $srcroot/$file #| indent "  "
+      continue
+    fi
+
+
+    #if (( ! $process )); then
+    if ! $process; then
+      log_debug "Not processing $srcfile"
+      if $already_linked; then
+        log_info "Removing ignored file $destfile"
+        command_log_trace rm "$destfile"
+      fi
+      continue
+    fi
+
+    if $already_linked; then
+      log_debug $srcfile is already linked
+      continue
+    fi
+    if [[ -e $destfile || -L $destfile ]]; then
+      command_log_trace mkdir -p "$backup_dir"
+      command_log_trace mv "$destfile" "$backup_dir"
+    fi
+    command_log_trace mkdir -p "$destdir"
+    command_log_trace ln -s "$srcfile" "$destfile"
+  done
+
+  # Clean up broken symlinks into this repo only on top-level dirs.
+  if (( recursive_depth == 0 )); then
+    depth="-maxdepth 1"
+    if $recursive; then
+      depth=
+    fi
+    for file in $(find $destdir $depth -xtype l); do
+      if [[ $(readlink $file) == $srcdir/* ]]; then
+        log_info "Removing broken symlink $file"
+        command_log_trace rm "$file"
+        command_log_trace rmdir -p --ignore-fail-on-non-empty $(dirname $file) 2>/dev/null
+      fi
+    done
+  fi
+
+  popd >/dev/null
+  if [[ -d $backup_dir ]]; then
+    rmdir --ignore-fail-on-non-empty "$backup_dir"
+  fi
+}
 
 # Make dotfiles come first, as some other _install.sh scripts may depend on the
 # configuration stored in dot files.
-for topdir in dotfiles !(dotfiles); do
-  if [[ -d $topdir ]]; then
-    if [[ $topdir == 'dotfiles' ]]; then
-      destdir=$HOME
-    elif [[ ${topdir:0:1} == '_' ]]; then
-      destdir=$HOME/.${topdir:1}
-    else
-      destdir=$HOME/$topdir
-    fi
-    if [[ ! -e $destdir ]]; then
-      mkdir "$destdir"
-    fi
+log_info Installing dotfiles
+install dotfiles ""
 
-    backup_dir=$HOME/home_backup/$topdir
-    mkdir "$backup_dir"
-
-    ignore=()
-    whitelist=()
-
-    cd "$topdir"
-    srcdir=$(pwd)
-    for file in _*; do
-      srcfile=$srcdir/$file
-      case $file in
-        _install.sh)
-          install_scripts+=("$srcfile")
-          ;;
-        _ignore)
-          if (( ${#whitelist[@]} )); then
-            echo "WARNING: You probably shouldn't use both $topdir/_ignore and $topdir/_whitelist"
-          fi
-          mapfile -t ignore < $srcfile
-          ;;
-        _whitelist)
-          if (( ${#ignore[@]} )); then
-            echo "WARNING: You probably shouldn't use both $topdir/_ignore and $topdir/_whitelist"
-          fi
-          mapfile -t whitelist < $srcfile
-          ;;
-        __pycache__)
-          # ignored
-          ;;
-        *)
-          echo Unknown specal file $file
-          ;;
-      esac
-    done
-    ignore+=(.gitignore)
-
-    for file in !(.|..|_*); do
-      git check-ignore -q $file; process=$? # Returns 0 if the file is ignored, or 1 otherwise
-      if (( $process )); then
-        for pat in "${ignore[@]}"; do
-          if [[ $file == $pat ]]; then
-            process=0
-          fi
-        done
-      fi
-      process=$(( $process && ! ${#whitelist[@]} ))
-      for pat in "${whitelist[@]}"; do
-        if [[ $file == $pat ]]; then
-          process=1
-          break
-        fi
-      done
-
-      srcfile=$srcdir/$file
-      if [[ -L $srcfile ]]; then
-        srcfile=$(readlink -f "$srcfile")
-      fi
-      destfile=$destdir/$file
-      [[ $(readlink -f "$destfile") == $srcfile ]]; already_linked=$?
-
-      if (( ! $process )); then
-        if is $already_linked; then
-          rm $destfile
-        fi
-        continue
-      fi
-
-      if is $already_linked; then
-        continue
-      fi
-      if [[ -e $destfile || -L $destfile ]]; then
-        mv "$destfile" "$backup_dir"
-      fi
-      ln -s "$srcfile" "$destfile"
-    done
-
-    # Clean up broken symlinks into this repo
-    for file in $(find $destdir -maxdepth 1 -xtype l); do
-      if [[ $(readlink $file) == $srcdir/* ]]; then
-        rm $file
-      fi
-    done
-
-    cd ..
-    rmdir --ignore-fail-on-non-empty "$backup_dir"
-  fi
+for topdir in $(find -maxdepth 1 -type d \! \( -name dotfiles -o -name '.*' \) ); do
+  topdir=${topdir#./}
+  log_info Installing $topdir
+  install -r "$topdir"
 done
 
 for install_script in "${install_scripts[@]}"; do
-  source "$install_script"
+  command_log_info source "$install_script"
 done
 
-rmdir --ignore-fail-on-non-empty "$HOME/home_backup"
+if [[ -d $HOME/home_backup ]]; then
+  rmdir --ignore-fail-on-non-empty "$HOME/home_backup"
+fi
 
 msg="Homedir's dotfiles are installed."
 if [[ -e $HOME/home_backup ]]; then
   msg+=" Existing files are in ~/home_backup"
 fi
-echo $msg
+log_success $msg
+exit

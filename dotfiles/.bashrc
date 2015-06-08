@@ -104,6 +104,11 @@ set -o vi
 # make ctrl-s do forward history search like it's supposed to
 stty -ixon
 
+# This makes tmux behave better
+if [[ $COLORTERM == "gnome-terminal" && $TERM == "xterm" ]]; then
+  export TERM="xterm-256color"
+fi
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color) color_prompt=yes;;

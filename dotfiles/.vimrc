@@ -65,6 +65,10 @@ Plugin 'shougo/unite.vim'
 Plugin 'tpope/vim-afterimage'
 " Git functionality
 Plugin 'tpope/vim-fugitive'
+" Better .tmux.conf editing
+Plugin 'tmux-plugins/vim-tmux'
+" Focus events passthrough from tmux
+Plugin 'tmux-plugins/vim-tmux-focus-events'
 
 " I don't know about these ones:
 " Python and PHP Debugger
@@ -375,7 +379,7 @@ set smartcase           " don't ignore case if pattern contains uppercase
 set smartindent         " be smart about indenting new lines
 set scrolloff=5         " always have 5 lines above or below the cursor
 set spelllang=en_us
-set t_vb=1              " ditto
+set t_vb=1              " Use visual bell
 set title               "
 set viminfo=%,'10,<100,f1,:20,n~/.viminfo
 set visualbell          " don't beep, flash
@@ -490,9 +494,9 @@ runtime vimrclocal.vim
 "color borland           " set color scheme
 set background=dark
 set t_Co=16
+let g:solarized_termcolors = 16
 let g:solarized_bold = 0
 let g:solarized_italic = 0
-let g:solarized_termcolors = 16
 colorscheme solarized
 
 "highlight OverLength ctermbg=red ctermfg=white guibg=#592929

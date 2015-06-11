@@ -75,7 +75,7 @@ Plugin 'tmux-plugins/vim-tmux-focus-events'
 
 " I don't know about these ones:
 " Python and PHP Debugger
-Plugin 'fisadev/vim-debug.vim'
+"Plugin 'fisadev/vim-debug.vim'
 " Pending tasks list
 Plugin 'fisadev/FixedTaskList.vim'
 " Git/mercurial/others diff icons on the side of the file lines

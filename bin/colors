@@ -26,6 +26,18 @@ unset params
 int_opts="22 01 02"
 inv_opts="27 07"
 
+# The old vte used specific indexes into the 256-color palette for dim colors:
+orig_dim_color=(
+[30]=016
+[31]=088
+[32]=028
+[33]=100
+[34]=018
+[35]=090
+[36]=030
+[37]=102
+)
+
 while [[ "$1" ]]; do
   case $1 in
     --int)
@@ -72,6 +84,11 @@ for g in 0 10; do
         echo -en Inv: $inv Int: $int Code: $c '\E['$inv';'$int';'$c'm'"$txt"
         tput sgr0
         echo
+        if [[ $int == 02 ]]; then
+          echo -en Inv: $inv OrigDim Code:${orig_dim_color[$c]} '\E['$inv';38;5;'${orig_dim_color[$c]}'m'"$txt"
+          tput sgr0
+          echo
+        fi
       done
     done
   done

@@ -105,7 +105,8 @@ set -o vi
 stty -ixon
 
 # This makes tmux behave better
-if [[ $COLORTERM == "gnome-terminal" && $TERM == "xterm" ]]; then
+if [[ $TERM == "xterm" ]]; then
+  # Is TERM ever xterm and this is NOT valid?
   export TERM="xterm-256color"
 fi
 
@@ -131,9 +132,21 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
+  # vte changed how it handles dim colors... I preferred 2;32 for dim green, but now I don't like it.
+  # The old vte used specific indexes into the 256-color palette for dim colors:
+  # how to use: 38;5;n
+  # 2;30 = 16
+  # 2;31 = 88
+  # 2;32 = 28
+  # 2;33 = 100
+  # 2;34 = 18
+  # 2;35 = 90
+  # 2;36 = 30
+  # 2;37 = 102
+
   PS1='${debian_chroot:+($debian_chroot)}\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]'
   if [[ $(type -t __git_ps1) == "function" ]]; then
-    PS1=$PS1'$(__git_ps1 " (\[\033[02;32m\]%s\[\033[00m\])")'
+    PS1=$PS1'$(__git_ps1 " (\[\033[38;5;28m\]%s\[\033[00m\])")'
   fi
   PS1=$PS1'\$ '
 else

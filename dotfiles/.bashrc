@@ -169,3 +169,29 @@ export DEBEMAIL="glennimoss+launchpad@gmail.com"
 
 # Python rc
 export PYTHONSTARTUP=~/.pythonrc.py
+
+# Set up solarized color palette for linux console
+if [[ $TERM == 'linux' ]]; then
+  palette=(
+    073642  # black
+    dc322f  # red
+    859900  # green
+    b58900  # yellow
+    268bd2  # blue
+    d33682  # magenta
+    2aa198  # cyan
+    eee8d5  # base2
+    002b36  # base03
+    cb4b16  # orange
+    586e75  # base01
+    657b83  # base00
+    839496  # base0
+    6c71c4  # violet
+    93a1a1  # base1
+    fdf6e3  # base3
+  )
+
+  for ((i=0; i < ${#palette[@]}; i++)); do
+    printf '\e]P%x%s\e\\' $i ${palette[$i]}
+  done
+fi

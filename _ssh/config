@@ -7,3 +7,5 @@ Host *
   KeepAlive       yes
   ServerAliveInterval 60
 
+Host github.com
+  User              git

@@ -27,7 +27,6 @@ declare -A LOG_LEVEL=(
 [TRACE]=5
 )
 
-LOG_THRESHOLD=${LOG_LEVEL[SUCCESS]}
 # Set to 0 to only print commands in the command_log_* functions
 LOG_COMMAND_EXEC=1
 
@@ -41,6 +40,9 @@ declare -A _log_color=(
 )
 
 _log_level_enabled () {
+  if [[ ! $LOG_THRESHOLD ]]; then
+    LOG_THRESHOLD=${LOG_LEVEL[SUCCESS]}
+  fi
   if (( ${LOG_LEVEL[${1:-INFO}]} > $LOG_THRESHOLD )); then
     return 1
   fi

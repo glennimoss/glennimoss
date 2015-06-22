@@ -195,3 +195,5 @@ if [[ $TERM == 'linux' ]]; then
     printf '\e]P%x%s\e\\' $i ${palette[$i]}
   done
 fi
+
+[[ -f $HOME/.bashrc_local ]] && source $HOME/.bashrc_local

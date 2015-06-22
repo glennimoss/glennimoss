@@ -6,8 +6,15 @@ cd $ROOT
 source lib/bash/logging.sh
 source lib/bash/logic.sh
 
-LOG_THRESHOLD=${LOG_LEVEL[INFO]}
-#LOG_THRESHOLD=${LOG_LEVEL[TRACE]}
+loglevel=INFO
+if [[ $1 == -d* ]]; then
+  loglevel=${1:2}
+  if [[ ! $loglevel ]]; then
+    loglevel=DEBUG
+  fi
+fi
+
+LOG_THRESHOLD=${LOG_LEVEL[$loglevel]}
 
 if [[ -e $HOME/home_backup ]]; then
   log_error "$HOME/home_backup already exists. Deal with it before running this."
@@ -50,7 +57,7 @@ install () {
   local destroot=${2-$(make_destname $1)}
   local backup_dir=$HOME/home_backup/$destroot
 
-  log_debug "install: recursive=$recursive (depth: $recursive_depth) srcroot=$srcroot destroot=$destroot"
+  log_debug "install: recursive=$recursive (depth: $(( recursive_depth ))) srcroot=$srcroot destroot=$destroot"
 
   local ignore=()
   local whitelist=()
@@ -89,7 +96,7 @@ install () {
   ignore+=(.gitignore)
 
   for file in !(.|..|_*); do
-    log_trace "looking at $file"
+    log_trace "looking at $srcroot/$file"
     #git check-ignore -q $file; local process=$? # Returns 0 if the file is ignored, or 1 otherwise
     local process=$(git check-ignore -q $file; notbool) # Returns 0 if the file is ignored, or 1 otherwise
     #if (( $process )); then
@@ -133,7 +140,7 @@ install () {
 
     #if (( ! $process )); then
     if ! $process; then
-      log_debug "Not processing $srcfile"
+      log_trace "Not processing $srcfile"
       if $already_linked; then
         log_info "Removing ignored file $destfile"
         command_log_trace rm "$destfile"
@@ -142,7 +149,7 @@ install () {
     fi
 
     if $already_linked; then
-      log_debug $srcfile is already linked
+      log_trace $srcfile is already linked
       continue
     fi
     if [[ -e $destfile || -L $destfile ]]; then
@@ -159,6 +166,7 @@ install () {
     if $recursive; then
       depth=
     fi
+    log_debug "Clean up broken symlinks in $destdir using ${depth:-no depth restriction}"
     for file in $(find $destdir $depth -xtype l); do
       if [[ $(readlink $file) == $srcdir/* ]]; then
         log_info "Removing broken symlink $file"

@@ -1,3 +1,6 @@
+" Ensure python3 takes precedence
+call has('python3')
+
 if has('vim_starting')
   if &compatible
     set nocompatible               " Be iMproved

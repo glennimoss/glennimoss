@@ -369,6 +369,7 @@ set mat=5               " tenths of a second to blink matching brackets
 set nobackup            " don't keep a backup file
 set noerrorbells        " don't beep damn it
 set noicon              "
+set nopaste             " Some people think paste should be on by default. I don't.
 set noshowmode          " Showmode is redundant with airline
 set nostartofline       " don't jump from column to cloumn when changin lines
 set pastetoggle=<M-p>   " easy paste switch
@@ -511,8 +512,9 @@ match InvalidWhitespace  /\s\+$/
 "syntax match Error / \+\t/ containedin=ALL
 2match InvalidWhitespace  / \+\t *\| *\t \+/
 
-" lines over 80 chars are error colored
-"syntax match OverLength /\%81v.\+/ containedin=ALL
+" Highlight the column just over textwidth
+highlight ColorColumn ctermbg=0
+set colorcolumn=+2
 
 function! ToggleHLSearch()
   if &hls

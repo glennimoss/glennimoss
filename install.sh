@@ -161,7 +161,7 @@ install () {
   done
 
   # Clean up broken symlinks into this repo only on top-level dirs.
-  if (( recursive_depth == 0 )); then
+  if [[ -d $destdir ]] && (( recursive_depth == 0 )); then
     depth="-maxdepth 1"
     if $recursive; then
       depth=

@@ -163,8 +163,6 @@ xterm*|rxvt*)
     ;;
 esac
 
-export GREP_OPTIONS="--exclude-dir=.svn"
-
 # Better less defaults
 export LESS=-FRXsS
 

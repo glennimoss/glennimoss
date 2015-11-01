@@ -86,19 +86,16 @@ if [ -x /usr/bin/dircolors ]; then
 
 fi
 
+COMMON_GREP_OPTIONS="--exclude-dir=.svn"
 $(grep --help 2>/dev/null | grep -- --color >/dev/null) && {
   #colorize grep matches with a nice yellow
-  # the LANG=C makes grep deal with multibyte chars better
-  alias grep='LANG=C grep --color=auto'
-  alias fgrep='LANG=C fgrep --color=auto'
-  alias egrep='LANG=C egrep --color=auto'
-} || {
-  # the LANG=C makes grep deal with multibyte chars better
-  alias grep='LANG=C grep'
-  alias fgrep='LANG=C fgrep'
-  alias egrep='LANG=C egrep'
+  COMMON_GREP_OPTIONS+=" --color=auto"
 }
 
+# the LANG=C makes grep deal with multibyte chars better
+alias grep="LANG=C grep $COMMON_GREP_OPTIONS"
+alias fgrep="LANG=C fgrep $COMMON_GREP_OPTIONS"
+alias egrep="LANG=C egrep $COMMON_GREP_OPTIONS"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert

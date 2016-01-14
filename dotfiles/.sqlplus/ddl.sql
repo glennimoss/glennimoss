@@ -16,7 +16,7 @@ BEGIN
   END IF;
   SELECT object_type
   INTO l_type
-  FROM all_objects
+  FROM dba_objects
   WHERE owner = l_obj(1)
     AND object_name = l_obj(2)
     AND object_type NOT LIKE '%PARTITION'

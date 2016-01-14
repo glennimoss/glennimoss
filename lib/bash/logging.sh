@@ -33,7 +33,7 @@ LOG_COMMAND_EXEC=1
 declare -A _log_color=(
 [ERROR]="\e[1;31m"
 [WARNING]="\e[33m"
-[SUCCESS]="\e[2;32m"
+[SUCCESS]="\e[38;5;28m"
 [INFO]="\e[0m"
 [DEBUG]="\e[35m"
 [TRACE]="\e[1;35m"
@@ -99,4 +99,9 @@ cat_log () {
   while IFS= read -r line; do
     _log "$line" $log_level
   done
+}
+
+set_log_level () {
+  loglevel=$1
+  LOG_THRESHOLD=${LOG_LEVEL[$loglevel]}
 }

@@ -114,7 +114,7 @@ def _color_fn (code, intensity=None, invert=False):
 
 # add any colors you might need.
 _red   = _color_fn(31)
-_green = _color_fn(32, intensity=Intensity.Dim)
+_green = _color_fn('38;5;28')
 _cyan  = _color_fn(36)
 _blue  = _color_fn(34)
 
@@ -173,6 +173,8 @@ class EditableBufferInteractiveConsole(InteractiveConsole, object):
     os.write(fd, lines.encode('utf-8'))
     os.close(fd)
 
+    self.last_buffer.clear()
+
     # - shell out to the editor
     os.system('%s %s' % (EDITOR, tmpfl))
 
@@ -210,7 +212,7 @@ class EditableBufferInteractiveConsole(InteractiveConsole, object):
     elif line.startswith(SH_EXEC):
       line = self._process_sh_cmd(line.strip(SH_EXEC))
     elif line.endswith(DOC_CMD):
-      line = 'print(%s.__doc__)' % line.strip(DOC_CMD)
+      line = 'help(%s)' % line.strip(DOC_CMD)
     return line
 
   def write (self, data):

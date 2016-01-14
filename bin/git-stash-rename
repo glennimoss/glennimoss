@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -e
+
+if (( $# == 2 )); then
+  ref=$1
+  msg=$2
+elif (( $# == 1 )); then
+  ref='stash@{0}'
+  msg=$1
+else
+  echo "usage: git stash-rename [<stash>] <new message>"
+  exit 1
+fi
+
+if [[ ! $(git rev-parse --verify --quiet $ref) ]]; then
+  echo "fatal: ambiguous argument '$ref': unknown revision" >&2
+  exit 2
+fi
+
+
+{
+  read -a parts
+  read subject
+} <<< "$(git show -s --format='%T %P%n%s' $ref)"
+
+pat='^((WIP on|On) [^:]+: )(.*)$'
+if [[ $subject =~ $pat ]]; then
+  commit_msg="${BASH_REMATCH[1]}$msg"
+  old_msg=${BASH_REMATCH[3]}
+else
+  commit_msg=$msg
+  old_msg=$subject
+fi
+
+tree=${parts[0]}
+parents=
+for parent in "${parts[@]:1}"; do
+  parents="$parents -p $parent"
+done
+
+commit=$(git commit-tree $parents -m "$commit_msg" $tree)
+
+git stash drop --quiet $ref
+
+git stash store -m "$commit_msg" $commit
+
+echo "Renamed $ref '$old_msg' to stash@{0} '$msg'"

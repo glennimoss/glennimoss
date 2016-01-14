@@ -9,3 +9,5 @@ set guioptions-=m "get rid of menu
 map <silent> <S-F2> :if g:toggleMenu == 1<CR>:set guioptions-=m<CR>:let g:toggleMenu = 0<CR>:else<CR>:set guioptions+=m<CR>:let g:toggleMenu = 1<CR>:endif<CR>
 
 set guifont=ProggyTinyGIM\ 10
+
+set columns=120

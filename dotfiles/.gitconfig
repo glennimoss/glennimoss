@@ -10,6 +10,7 @@
   ready = rebase -i @{u}
   root = rev-parse --show-toplevel
   br = branch -vv
+  show-merge = log --decorate --abbrev-commit --stat -M -n1 -p -m -c
 #[user]
 #  name = ...
 #  email = ...

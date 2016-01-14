@@ -36,6 +36,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'bkad/CamelCaseMotion'
 Plugin 'tpope/vim-surround'
 Plugin 'matchit.zip'
+Plugin 'vim-scripts/scratch.vim'
 
 " These are pretty good:
 " File browser

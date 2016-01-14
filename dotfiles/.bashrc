@@ -7,7 +7,7 @@
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -d "${HOME}/bin" ] ; then
+if [[ -d "${HOME}/bin" ]] ; then
   PATH=${HOME}/bin:${PATH}
   export PATH
 fi
@@ -16,9 +16,9 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
+  if [[ -f /usr/share/bash-completion/bash_completion ]]; then
     . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
+  elif [[ -f /etc/bash_completion ]]; then
     . /etc/bash_completion
   fi
 fi
@@ -41,12 +41,12 @@ done
 export ORACLE_HOME
 export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
 
-NLS_LANG=AMERICAN_AMERICA.UTF8
-NLS_DATE_FORMAT="YYYY-MM-DD HH24:MI:SS"
-NLS_TIMESTAMP_FORMAT="YYYY-MM-DD HH24:MI:SS.FF6"
+export NLS_LANG=AMERICAN_AMERICA.UTF8
+export NLS_DATE_FORMAT="YYYY-MM-DD HH24:MI:SS"
+export NLS_TIMESTAMP_FORMAT="YYYY-MM-DD HH24:MI:SS.FF6"
 
 # Vim
-if [ $(which vim) ]; then
+if [[ $(which vim) ]]; then
   # have vim, use it
   export EDITOR=vim
   export VISUAL=vim
@@ -56,7 +56,7 @@ else
   export VISUAL=vi
 fi
 
-if [ -f ~/.bash_aliases ]; then
+if [[ -f ~/.bash_aliases ]]; then
   . ~/.bash_aliases
 fi
 
@@ -68,10 +68,7 @@ fi
 # by ssh.
 [[ $- =~ i ]] || { : ; return 0 ; }
 
-# don't put duplicate lines in the history. See bash(1) for more options
-# don't overwrite GNU Midnight Commander's setting of `ignorespace'.
-HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-# ... or force ignoredups and ignorespace
+# ignoredups and ignorespace
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
@@ -79,6 +76,8 @@ shopt -s histappend
 shopt -s cmdhist
 shopt -s extglob
 export HISTIGNORE="&:ls:lla:la:[bf]g:exit"
+# Timestamp for previous commands when running history
+export HISTTIMEFORMAT='[%F %T] '
 
 PROMPT_COMMAND='history -a'
 
@@ -94,7 +93,7 @@ export COLUMNS LINES
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+if [[ -z "$debian_chroot" && -r /etc/debian_chroot ]]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
@@ -105,54 +104,27 @@ set -o vi
 stty -ixon
 
 # This makes tmux behave better
-if [[ $TERM == "xterm" ]]; then
-  # Is TERM ever xterm and this is NOT valid?
+if [[ ($VTE_VERSION || $XTERM_VERSION || $COLORTERM) && $TERM == "xterm" ]]; then
   export TERM="xterm-256color"
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-esac
+# vte changed how it handles dim colors... I preferred 2;32 for dim green, but now I don't like it.
+# The old vte used specific indexes into the 256-color palette for dim colors:
+# how to use: 38;5;n
+# 2;30 = 16
+# 2;31 = 88
+# 2;32 = 28
+# 2;33 = 100
+# 2;34 = 18
+# 2;35 = 90
+# 2;36 = 30
+# 2;37 = 102
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-  if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    # We have color support; assume it's compliant with Ecma-48
-    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-    # a case would tend to support setf rather than setaf.)
-    color_prompt=yes
-  else
-    color_prompt=
-  fi
+PS1='${debian_chroot:+($debian_chroot)}\u@\h\[\e[00m\]:\[\e[01;34m\]\w\[\e[00m\]'
+if [[ $(type -t __git_ps1) == "function" ]]; then
+  PS1=$PS1'$(__git_ps1 " (\[\e[38;5;28m\]%s\[\e[00m\])")'
 fi
-
-if [ "$color_prompt" = yes ]; then
-  # vte changed how it handles dim colors... I preferred 2;32 for dim green, but now I don't like it.
-  # The old vte used specific indexes into the 256-color palette for dim colors:
-  # how to use: 38;5;n
-  # 2;30 = 16
-  # 2;31 = 88
-  # 2;32 = 28
-  # 2;33 = 100
-  # 2;34 = 18
-  # 2;35 = 90
-  # 2;36 = 30
-  # 2;37 = 102
-
-  PS1='${debian_chroot:+($debian_chroot)}\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]'
-  if [[ $(type -t __git_ps1) == "function" ]]; then
-    PS1=$PS1'$(__git_ps1 " (\[\033[38;5;28m\]%s\[\033[00m\])")'
-  fi
-  PS1=$PS1'\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
+PS1=$PS1'\$ '
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -163,8 +135,9 @@ xterm*|rxvt*)
     ;;
 esac
 
+export PAGER=less
 # Better less defaults
-export LESS=-FRXsS
+export LESS=-FRXsSi
 
 #Don't log me out!
 unset TMOUT

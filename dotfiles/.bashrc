@@ -23,6 +23,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
+if hash grunt 2>/dev/null; then
+  eval "$(grunt --completion=bash)"
+fi
+
 JAVA_HOME=$(readlink -f /usr/bin/java)
 JAVA_HOME=${JAVA_HOME%%/jre/*}
 export JAVA_HOME

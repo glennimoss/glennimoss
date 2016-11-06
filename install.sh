@@ -6,6 +6,15 @@ cd $ROOT
 source lib/bash/logging.sh
 source lib/bash/logic.sh
 
+if [[ $1 == "-h" || $1 == "--help" ]]; then
+  echo "Usage: $0 [-dLEVEL]"
+  echo "Install all user configuration."
+  echo "  -dLEVEL    Set loging level to LEVEL (One of: TRACE, DEBUG, INFO, SUCCESS, WARNING, ERROR)"
+  echo "             If LEVEL is not specified, DEBUG is used."
+  exit 0
+fi
+
+
 loglevel=INFO
 if [[ $1 == -d* ]]; then
   loglevel=${1:2}

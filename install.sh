@@ -5,8 +5,13 @@ if (( ${BASH_VERSINFO[0]} < 4 )); then
   exit 100
 fi
 
-ROOT=$(dirname $(readlink -f $0))
-cd $ROOT
+if ! hash realpath 2>/dev/null; then
+  echo 'Command `realpath` not found. Please install coreutils.'
+  exit 101
+fi
+
+cd -P $(dirname "$0")
+ROOT=$(pwd -P)
 
 source lib/bash/logging.sh
 source lib/bash/logic.sh
@@ -136,10 +141,10 @@ install () {
 
     srcfile=$srcdir/$file
     if [[ -L $srcfile ]]; then
-      srcfile=$(readlink -f "$srcfile")
+      srcfile=$(realpath "$srcfile")
     fi
     local destfile=$destdir/$file
-    local already_linked=$([[ $(readlink -f "$destfile") == $srcfile ]]; bool)
+    local already_linked=$([[ $(realpath "$destfile") == $srcfile ]]; bool)
 
     if [[ -d $srcfile ]] && $recursive; then
       # Remove existing shallow linking
@@ -182,7 +187,7 @@ install () {
     fi
     log_debug "Clean up broken symlinks in $destdir using ${depth:-no depth restriction}"
     for file in $(find $destdir $depth -xtype l); do
-      if [[ $(readlink $file) == $srcdir/* ]]; then
+      if [[ $(realpath -m $file) == $srcdir/* ]]; then
         log_info "Removing broken symlink $file"
         command_log_trace rm "$file"
         command_log_trace rmdir -p --ignore-fail-on-non-empty $(dirname $file) 2>/dev/null

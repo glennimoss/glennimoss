@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+if (( ${BASH_VERSINFO[0]} < 4 )); then
+  echo "This requires Bash 4 or later."
+  exit 100
+fi
 
 ROOT=$(dirname $(readlink -f $0))
 cd $ROOT

@@ -12,6 +12,11 @@ if [[ -d "${HOME}/bin" ]] ; then
   export PATH
 fi
 
+if [[ -d "${HOME}/.local/bin" ]] ; then
+  PATH=${HOME}/.local/bin:${PATH}
+  export PATH
+fi
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -71,6 +76,16 @@ fi
 # the .bashrc file is evaluating before a command executed
 # by ssh.
 [[ $- =~ i ]] || { : ; return 0 ; }
+
+# If a bare directory (without cd) is the command, then just cd into it.
+cd_if_directory () {
+  e=$? cmd=$BASH_COMMAND
+  if [[ $e == 126 && -d $cmd ]]; then
+    cd "$cmd"
+  fi
+}
+trap 'cd_if_directory' ERR
+
 
 # ignoredups and ignorespace
 HISTCONTROL=ignoreboth
@@ -148,8 +163,7 @@ unset TMOUT
 
 # Random envvars:
 export SLANT_COLOUR_7=aaa9a5 SLANT_PRESETS="130x73 Hard:130x73dh"
-export NET_COLOUR_4=000000
-export NET_COLOUR_5=000000
+export NET_COLOUR_4=000000 NET_COLOUR_5=000000
 
 # deb packaging stuff:
 export DEBFULLNAME="Glenn Moss"

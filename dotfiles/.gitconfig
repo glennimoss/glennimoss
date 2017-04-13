@@ -4,7 +4,7 @@
 	branch = auto
 [alias]
   ll = log --graph --decorate --abbrev-commit --stat -M
-  st = status
+  st = status -uno
   diffw = diff --color-words='\\w+|.'
   diffchars = diff --color-words=.
   ready = rebase -i @{u}
@@ -18,9 +18,13 @@
   path = .gitconfiglocal
 [diff]
 	renames = true
+	mnemonicPrefix = true
 [push]
 	default = simple
 [grep]
 	patternType = perl
 [core]
-	pager = less -S
+	pager = diff-highlight | less -S
+[rerere]
+	enabled = true
+	autoupdate = true

@@ -152,7 +152,7 @@ sys.displayhook = my_displayhook
 
 EDITOR   = os.environ.get('EDITOR', 'vi')
 SHELL    = os.environ.get('SHELL', '/bin/bash')
-EDIT_CMD = '\e'
+EDIT_CMD = r'\e'
 SH_EXEC  = '!'
 DOC_CMD  = '?'
 
@@ -169,7 +169,7 @@ class EditableBufferInteractiveConsole(InteractiveConsole, object):
   def _process_edit_cmd (self):
     # - setup the edit buffer
     fd, tmpfl = mkstemp('.py')
-    lines = '\n'.join('# %s' % line.strip('\n') for line in self.last_buffer)
+    lines = '\n'.join(line.strip('\n') for line in self.last_buffer)
     os.write(fd, lines.encode('utf-8'))
     os.close(fd)
 
@@ -181,7 +181,7 @@ class EditableBufferInteractiveConsole(InteractiveConsole, object):
     # - process commands
     lines = open(tmpfl).readlines()
     os.unlink(tmpfl)
-    for stmt in (line for line in lines if not line.startswith('#')):
+    for stmt in lines:
       self.write(_cyan("... %s" % stmt))
       self.push(stmt.strip('\n'))
     return ''

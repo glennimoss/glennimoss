@@ -1,5 +1,6 @@
 --pager=less -FRXsS
 --smart-case
+--ignore-dir=.meteor
 --type-set=tmpl=.tmpl
 --type-set=stg=.stg
 --type-set=g=.g

@@ -3,8 +3,9 @@ SET verify off
 SET define on
 
 DECLARE
+  l_table VARCHAR2(30) := '&1';
   l_maxlen NUMBER;
-  l_high_val VARCHAR2(10);
+  l_high_val VARCHAR2(30);
   l_total_bytes NUMBER := 0;
   l_suff VARCHAR2(3);
 BEGIN
@@ -12,8 +13,8 @@ BEGIN
   INTO l_maxlen
   FROM dba_segments
   WHERE (owner = SYS_CONTEXT('userenv', 'current_schema')
-    AND segment_name LIKE UPPER('&1'))
-     OR owner || '.' || segment_name LIKE UPPER('&1');
+    AND segment_name LIKE UPPER(l_table))
+     OR owner || '.' || segment_name LIKE UPPER(l_table);
 
   k.print(k.args('#   ', RPAD('PT_NAME', l_maxlen), 'SPACE        HIGH_VALUE'));
   k.print(k.args('----', RPAD('-', l_maxlen, '-'),  '------------ ----------'));
@@ -32,8 +33,8 @@ BEGIN
                        , SUM(bytes) AS bytes
                   FROM dba_segments
                   WHERE (owner = SYS_CONTEXT('userenv', 'current_schema')
-                    AND segment_name LIKE UPPER('&1'))
-                     OR owner || '.' || segment_name LIKE UPPER('&1')
+                    AND segment_name LIKE UPPER(l_table))
+                     OR owner || '.' || segment_name LIKE UPPER(l_table)
                   GROUP BY owner, segment_name, partition_name
                  ) ds
                , dba_tab_partitions dtp
@@ -42,7 +43,7 @@ BEGIN
               AND ds.partition_name = dtp.partition_name(+)
             ORDER BY dtp.partition_position) LOOP
     IF r.high_value IS NOT NULL THEN
-      EXECUTE IMMEDIATE 'SELECT TO_CHAR(' || r.high_value || ', ''YYYY-MM-DD'') FROM DUAL'
+      EXECUTE IMMEDIATE 'SELECT TO_CHAR(' || r.high_value || ', ''YYYY-MM-DD HH24:MI:SS'') FROM DUAL'
       INTO l_high_val;
     ELSE
       l_high_val := 'NON-PART''D';

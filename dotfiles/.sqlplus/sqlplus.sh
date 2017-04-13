@@ -20,7 +20,7 @@ if [[ $LINES ]]; then
   echo "set pages ${LINES}" >> $HOME/.sqlplus/dyn_login.sql
 fi
 
-$SQLPLUS $*
+$SQLPLUS -L $*
 
 echo -n > $HOME/.sqlplus/dyn_login.sql
 rm -f $SCRATCH

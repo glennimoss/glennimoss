@@ -19,23 +19,29 @@ SET verify off
 set termout off
 COLUMN line_digits NEW_VALUE line_digits
 SELECT MAX(LENGTH(line)) AS line_digits
-FROM user_source
-WHERE name = UPPER('&1')
+FROM all_source
+WHERE ((owner = SYS_CONTEXT('userenv', 'current_schema')
+  AND name = UPPER('&1'))
+   OR owner || '.' || name = UPPER('&1'))
   AND type IN ('PACKAGE', 'TYPE', 'TRIGGER', 'PROCEDURE', 'FUNCTION', 'PACKAGE BODY', 'TYPE BODY');
 COLUMN line_digits CLEAR
 set termout on
 
 SELECT '/*' || LPAD(line, &line_digits, '0') || '*/' || text
-FROM user_source
-WHERE name = UPPER('&1')
+FROM all_source
+WHERE ((owner = SYS_CONTEXT('userenv', 'current_schema')
+  AND name = UPPER('&1'))
+   OR owner || '.' || name = UPPER('&1'))
   AND type IN ('PACKAGE', 'TYPE', 'TRIGGER', 'PROCEDURE', 'FUNCTION')
 ORDER BY line;
 PROMPT /
 PROMPT
 
 SELECT '/*' || LPAD(line, &line_digits, '0') || '*/' || text
-FROM user_source
-WHERE name = UPPER('&1')
+FROM all_source
+WHERE ((owner = SYS_CONTEXT('userenv', 'current_schema')
+  AND name = UPPER('&1'))
+   OR owner || '.' || name = UPPER('&1'))
   AND type IN ('PACKAGE BODY', 'TYPE BODY')
 ORDER BY line;
 PROMPT /

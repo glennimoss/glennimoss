@@ -73,6 +73,8 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tmux-plugins/vim-tmux'
 " Focus events passthrough from tmux
 Plugin 'tmux-plugins/vim-tmux-focus-events'
+" Background make process
+Plugin 'tpope/vim-dispatch'
 
 " I don't know about these ones:
 " Python and PHP Debugger
@@ -158,7 +160,7 @@ let g:syntastic_python_checkers = ["flake8", "pep257"]
 " Ignore indentation not being a multiple of 4:
 "let g:syntastic_python_flake8_quiet_messages = {"regex":"\\[E111\\]$"}
 " This set of ignores matches my personal style
-let g:syntastic_python_flake8_quiet_messages = {"regex":"\\[E\\(111\\|121\\|124\\|125\\|129\\|211\\)\\]$"}
+let g:syntastic_python_flake8_quiet_messages = {"regex":"\\[E\\(111\\|121\\|124\\|125\\|129\\|211\\|231\\)\\]$"}
 
 " Vundle ===================================================
 
@@ -373,7 +375,9 @@ set noicon              "
 set nopaste             " Some people think paste should be on by default. I don't.
 set noshowmode          " Showmode is redundant with airline
 set nostartofline       " don't jump from column to cloumn when changin lines
+set number              " show number lines (see relativenumber)
 set pastetoggle=<M-p>   " easy paste switch
+set relativenumber      " Display relative line offsets for lines other than current
 set report=0            " tell me when anything changes
 set ruler               " show the cursor position all the time
 set shellcmdflag=-lc    " Make :! be a login shell so .profile is read
@@ -391,6 +395,12 @@ set visualbell          " don't beep, flash
 set whichwrap=<,>,h,l   " let cursors movment wrap to next/previous line
 set wildmenu            " cool statusline tricks
 set wildmode=longest:full,full
+
+if has('patch-7.4.338')
+  set breakindent         " Indents wrapped lines
+  set breakindentopt=shift:2 " Adds an extra 2 chars to the wrapped indent
+  set linebreak           " Wrap words properly
+endif
 
 " print format layout
 set printoptions=left:0.5in,right:0.5in,top:0.25in,bottom:0.5in,paper:letter
@@ -445,7 +455,7 @@ nnoremap <C-Down> G
 nnoremap <silent> <Leader>s :setlocal spell!<CR>
 
 " Don't use Ex mode, use Q for formatting
-nnoremap Q gq
+"nnoremap Q gq
 
 " fancy search and replace short cuts
 "nnoremap ;; :%s:::g<Left><Left><Left>
@@ -466,6 +476,9 @@ nnoremap <Leader>O :set paste<CR>O
 
 " for when you forget to sudo vim
 command! W w !sudo tee % > /dev/null
+
+" Because I can't control my shifting
+cabbrev B b
 
 " Use Python 3 docs
 let g:pydoc_cmd = 'pydoc3'
@@ -533,13 +546,13 @@ nmap <silent> <C-n> <Esc>:call ToggleHLSearch()<CR>
 let PHP_removeCRwhenUnix=1
 
 " vim-sleuth should make these unnecessary
-" set shiftwidth=2
-" set tabstop=8
-" if v:version >= 704
-"   setlocal softtabstop=-1
-" else
-"   setlocal softtabstop=2
-" endif
+set shiftwidth=2
+set tabstop=8
+if v:version >= 704
+  setlocal softtabstop=-1
+else
+  setlocal softtabstop=2
+endif
 set expandtab
 "set textwidth=80
 set cino=>1s,n-1s,:1s,=1s,(2s,+2s

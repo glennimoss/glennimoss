@@ -41,6 +41,7 @@ export LC_COLLATE=POSIX
 
 #Oracle
 export SQLPATH=${SQLPATH}${SQLPATH:+:}.:$HOME/.sqlplus
+export ORACLE_PATH=${ORACLE_PATH}${ORACLE_PATH:+:}.:$HOME/.sqlplus
 export TNS_ADMIN=/etc/oracle
 for d in /usr/lib/oracle/*; do
   ORACLE_HOME=$d/client64

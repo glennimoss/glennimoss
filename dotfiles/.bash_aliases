@@ -58,8 +58,6 @@ dtob () {
 
 alias phing="phing -find build.xml"
 
-alias sqlplus="$HOME/.sqlplus/sqlplus.sh"
-
 alias gitdiff="git diff --no-index"
 
 function svnpropdiff {

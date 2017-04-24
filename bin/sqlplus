@@ -22,5 +22,4 @@ fi
 
 $SQLPLUS -L $*
 
-echo -n > $HOME/.sqlplus/dyn_login.sql
 rm -f $SCRATCH

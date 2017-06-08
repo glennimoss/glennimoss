@@ -78,7 +78,7 @@ function svnpropdiff {
 [[ $- =~ i ]] || return 0
 
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
+if hash dircolors; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls -bF --color=auto'
 

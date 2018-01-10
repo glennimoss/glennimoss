@@ -8,6 +8,10 @@ set guioptions-=m "get rid of menu
 :let g:toggleMenu = 0
 map <silent> <S-F2> :if g:toggleMenu == 1<CR>:set guioptions-=m<CR>:let g:toggleMenu = 0<CR>:else<CR>:set guioptions+=m<CR>:let g:toggleMenu = 1<CR>:endif<CR>
 
-set guifont=ProggyTinyGIM\ 10
+if has("gui_macvim")
+  set guifont=ProggyTinyGIM!FaceName:h12
+else
+  set guifont=ProggyTinyGIM\ 10
+endif
 
 set columns=120

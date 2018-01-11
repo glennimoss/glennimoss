@@ -183,6 +183,7 @@ map <F3> :NERDTreeToggle<CR>
 nmap ,t :NERDTreeFind<CR>
 " don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+let NERDTreeWinPos = "right"
 
 
 " Tasklist ------------------------------
@@ -242,7 +243,7 @@ let g:vim_debug_disable_mappings = 1
 " Syntastic ------------------------------
 
 " show list of errors and warnings on the current file
-nmap <leader>e :Errors<CR>
+"nmap <leader>e :Errors<CR>
 " check also when just opened the file
 let g:syntastic_check_on_open = 1
 " don't put icons on the sign column (it hides the vcs status icons of signify)
@@ -473,6 +474,15 @@ nnoremap K i<CR><Esc>
 nnoremap <Leader>i :set paste<CR>i
 nnoremap <Leader>o :set paste<CR>o
 nnoremap <Leader>O :set paste<CR>O
+
+" Autoexpand matching characters
+inoremap (<CR> (<CR>)<Esc>O
+inoremap {<CR> {<CR>}<Esc>O
+inoremap {; {<CR>};<Esc>O
+inoremap {, {<CR>},<Esc>O
+inoremap [<CR> [<CR>]<Esc>O
+inoremap [; [<CR>];<Esc>O
+inoremap [, [<CR>],<Esc>O
 
 " for when you forget to sudo vim
 command! W w !sudo tee % > /dev/null

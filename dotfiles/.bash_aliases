@@ -12,8 +12,11 @@ alias diff='diff -u'
 alias :e='vim'
 alias go='gnome-open'
 alias hexdump='hexdump -C'
-alias ack='ack-grep'
 alias info='info --vi-keys'
+
+if ! hash ack 2>/dev/null && hash ack-grep 2>/dev/null; then
+  alias ack='ack-grep'
+fi
 
 # base conversions
 radix_conv () {

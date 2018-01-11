@@ -7,3 +7,4 @@
 --type-set=kss=.kss
 --type-set=coffee=.coffee
 --type-set=vala=.vala
+--type-set=csv=.csv

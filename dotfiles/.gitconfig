@@ -3,7 +3,7 @@
 	status = auto
 	branch = auto
 [alias]
-  ll = log --graph --decorate --abbrev-commit --stat -M
+  ll = log --graph --decorate --abbrev-commit --stat -M -D
   st = status -uno
   diffw = diff --color-words='\\w+|.'
   diffchars = diff --color-words=.
@@ -17,8 +17,9 @@
 [include]
   path = .gitconfiglocal
 [diff]
-	renames = true
-	mnemonicPrefix = true
+	renames = copy
+	noprefix = true
+	algorithm = patience
 [push]
 	default = simple
 [grep]
@@ -28,3 +29,5 @@
 [rerere]
 	enabled = true
 	autoupdate = true
+[merge]
+	tool = vimdiff

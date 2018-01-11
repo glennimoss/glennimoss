@@ -1,0 +1,10 @@
+SET echo off
+SET feedback off
+SET heading off
+SET linesize 1000
+SET newpage 0
+SET null ""
+SET pagesize 0
+SET trimspool on
+SET verify off
+SET timing off

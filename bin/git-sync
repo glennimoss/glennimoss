@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if (( $# == 1 )); then
+  branch=$1
+else
+  echo "usage: git sync <branch>"
+  exit 1
+fi
+
+if [[ ! $(git rev-parse --verify --quiet $branch) ]]; then
+  echo "fatal: ambiguous argument '$branch': unknown revision" >&2
+  exit 2
+fi
+
+remote=$(git config --get branch."$branch".remote)
+remote_branch=$(git config --get branch."$branch".merge)
+if [[ ! $remote || ! $remote_branch ]]; then
+  echo "There is no tracking information for '$branch'" >&2
+  exit 3
+fi
+
+git fetch "$remote" "$remote_branch":"$branch"
+

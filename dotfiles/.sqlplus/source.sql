@@ -19,7 +19,7 @@ SET verify off
 set termout off
 COLUMN line_digits NEW_VALUE line_digits
 SELECT MAX(LENGTH(line)) AS line_digits
-FROM all_source
+FROM dba_source
 WHERE ((owner = SYS_CONTEXT('userenv', 'current_schema')
   AND name = UPPER('&1'))
    OR owner || '.' || name = UPPER('&1'))
@@ -28,7 +28,7 @@ COLUMN line_digits CLEAR
 set termout on
 
 SELECT '/*' || LPAD(line, &line_digits, '0') || '*/' || text
-FROM all_source
+FROM dba_source
 WHERE ((owner = SYS_CONTEXT('userenv', 'current_schema')
   AND name = UPPER('&1'))
    OR owner || '.' || name = UPPER('&1'))
@@ -38,7 +38,7 @@ PROMPT /
 PROMPT
 
 SELECT '/*' || LPAD(line, &line_digits, '0') || '*/' || text
-FROM all_source
+FROM dba_source
 WHERE ((owner = SYS_CONTEXT('userenv', 'current_schema')
   AND name = UPPER('&1'))
    OR owner || '.' || name = UPPER('&1'))

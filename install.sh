@@ -144,7 +144,7 @@ install () {
       srcfile=$(realpath "$srcfile")
     fi
     local destfile=$destdir/$file
-    local already_linked=$([[ $(realpath "$destfile") == $srcfile ]]; bool)
+    local already_linked=$([[ $(realpath -q "$destfile") == $srcfile ]]; bool)
 
     if [[ -d $srcfile ]] && $recursive; then
       # Remove existing shallow linking

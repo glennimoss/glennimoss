@@ -72,7 +72,7 @@ Plugin 'tpope/vim-fugitive'
 " Better .tmux.conf editing
 Plugin 'tmux-plugins/vim-tmux'
 " Focus events passthrough from tmux
-Plugin 'tmux-plugins/vim-tmux-focus-events'
+"Plugin 'tmux-plugins/vim-tmux-focus-events'
 " Background make process
 Plugin 'tpope/vim-dispatch'
 

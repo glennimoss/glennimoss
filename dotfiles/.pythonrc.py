@@ -40,6 +40,7 @@ import rlcompleter
 import signal
 import subprocess
 import sys
+import traceback
 from tempfile import mkstemp
 from code import InteractiveConsole
 
@@ -155,14 +156,15 @@ SHELL    = os.environ.get('SHELL', '/bin/bash')
 EDIT_CMD = r'\e'
 SH_EXEC  = '!'
 DOC_CMD  = '?'
+SOURCE_CMD = '.'
 
 class EditableBufferInteractiveConsole(InteractiveConsole, object):
   def __init__ (self, *args, **kwargs):
     self.last_buffer = [] # This holds the last executed statements
-    self.buffer = []      # This holds the statement to be executed
     super(EditableBufferInteractiveConsole, self).__init__(*args, **kwargs)
+    self.resetbuffer = self._resetbuffer
 
-  def resetbuffer (self):
+  def _resetbuffer (self):
     self.last_buffer.extend(self.buffer)
     return super(EditableBufferInteractiveConsole, self).resetbuffer()
 
@@ -179,20 +181,39 @@ class EditableBufferInteractiveConsole(InteractiveConsole, object):
     os.system('%s %s' % (EDITOR, tmpfl))
 
     # - process commands
-    lines = open(tmpfl).readlines()
+    self.last_buffer.append(self._source_file(tmpfl, temp=True))
     os.unlink(tmpfl)
-    for stmt in lines:
-      self.write(_cyan("... %s" % stmt))
-      self.push(stmt.strip('\n'))
+    return ''
+
+  def _source_file (self, filename, temp=False):
+    with open(filename) as f:
+      source = f.read()
+
+      sourcelines = source.splitlines()
+      fmt = "{{:0{}}}... {{}}\n".format(len(str(len(sourcelines))))
+      for lineno, line in enumerate(sourcelines, 1):
+        self.write(fmt.format(lineno, line), _cyan)
+      try:
+        code = compile(source, '<temp>' if temp else filename, 'exec')
+
+        self.runcode(code)
+      except SyntaxError as se:
+        self.showsyntaxerror()
+
+    if temp:
+      return source
     return ''
 
   def _process_sh_cmd (self, cmd):
     if cmd:
+      """
       out, err = subprocess.Popen([SHELL, '-c', cmd],
           stdout=subprocess.PIPE,
           stderr=subprocess.PIPE).communicate()
-      print (err and _red(err)) or (out and _green(out))
+      print((err and _red(err)) or (out and _green(out)))
       builtins._ = (out, err)
+      """
+      os.system(cmd)
     else:
       if os.environ.get('SSH_CONNECTION'):
         # I use the bash function below in my .bashrc to directly open
@@ -212,11 +233,13 @@ class EditableBufferInteractiveConsole(InteractiveConsole, object):
     elif line.startswith(SH_EXEC):
       line = self._process_sh_cmd(line.strip(SH_EXEC))
     elif line.endswith(DOC_CMD):
-      line = 'help(%s)' % line.strip(DOC_CMD)
+      line = 'help(%s)' % line[:-len(DOC_CMD)]
+    elif line.startswith(SOURCE_CMD):
+      line = self._source_file(line[len(SOURCE_CMD):].strip())
     return line
 
-  def write (self, data):
-    sys.stderr.write(_red(data))
+  def write (self, data, wrapper=_red):
+    sys.stderr.write(wrapper(data))
 
 # - create our pimped out console
 __c = EditableBufferInteractiveConsole()

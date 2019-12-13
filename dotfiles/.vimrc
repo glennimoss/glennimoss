@@ -418,6 +418,10 @@ elseif !has('nvim')
   set term=builtin_xterm  " use xterm keyboard mappings
 endif
 
+if has("mac")
+  set clipboard=unnamed
+endif
+
 syntax on               " enable syntax highlighting
 
 set viewoptions=folds   " save flod state
@@ -474,6 +478,10 @@ nnoremap K i<CR><Esc>
 nnoremap <Leader>i :set paste<CR>i
 nnoremap <Leader>o :set paste<CR>o
 nnoremap <Leader>O :set paste<CR>O
+nnoremap <Leader>a :set paste<CR>a
+nnoremap <Leader>A :set paste<CR>A
+
+map <Leader>v <C-v>
 
 " Autoexpand matching characters
 inoremap (<CR> (<CR>)<Esc>O

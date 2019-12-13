@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 
 function usage () {
@@ -81,11 +81,11 @@ for g in 0 10; do
 
       for int in $int_opts; do
         c=$(($code + $g))
-        echo -en Inv: $inv Int: $int Code: $c '\E['$inv';'$int';'$c'm'"$txt"
+        echo -en Inv: $inv Int: $int Code: $c '\e['$inv';'$int';'$c'm'"$txt"
         tput sgr0
         echo
         if [[ $int == 02 ]]; then
-          echo -en Inv: $inv OrigDim Code:${orig_dim_color[$c]} '\E['$inv';38;5;'${orig_dim_color[$c]}'m'"$txt"
+          echo -en Inv: $inv OrigDim Code:${orig_dim_color[$c]} '\e['$inv';38;5;'${orig_dim_color[$c]}'m'"$txt"
           tput sgr0
           echo
         fi

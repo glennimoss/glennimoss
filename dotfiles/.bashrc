@@ -17,11 +17,10 @@ if [[ -d "${HOME}/.local/bin" ]] ; then
   export PATH
 fi
 
-case $(uname -s) in
-  Darwin*)
-    . $HOME/.bashrc_darwin
-    ;;
-esac
+exists () {
+  hash "$1" 2> /dev/null
+}
+
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -36,8 +35,12 @@ if ! shopt -oq posix; then
   fi
 fi
 
-if hash grunt 2>/dev/null; then
+if exists grunt; then
   eval "$(grunt --completion=bash)"
+fi
+
+if exists aws_completer; then
+  complete -C $(hash -t aws_completer) aws
 fi
 
 JAVA_HOME=$(realpath /usr/bin/java)
@@ -65,7 +68,7 @@ export NLS_TIMESTAMP_FORMAT="YYYY-MM-DD HH24:MI:SS.FF6"
 export NLS_TIMESTAMP_TZ_FORMAT="YYYY-MM-DD HH24:MI:SS.FF6 TZR"
 
 # Vim
-if [[ $(which vim) ]]; then
+if exists vim; then
   # have vim, use it
   export EDITOR=vim
   export VISUAL=vim
@@ -74,6 +77,12 @@ else
   export EDITOR=vi
   export VISUAL=vi
 fi
+
+case $(uname -s) in
+  Darwin*)
+    . $HOME/.bashrc_darwin
+    ;;
+esac
 
 if [[ -f ~/.bash_aliases ]]; then
   . ~/.bash_aliases
@@ -137,33 +146,6 @@ if [[ ($VTE_VERSION || $XTERM_VERSION || $COLORTERM) && $TERM == "xterm" ]]; the
   export TERM="xterm-256color"
 fi
 
-# vte changed how it handles dim colors... I preferred 2;32 for dim green, but now I don't like it.
-# The old vte used specific indexes into the 256-color palette for dim colors:
-# how to use: 38;5;n
-# 2;30 = 16
-# 2;31 = 88
-# 2;32 = 28
-# 2;33 = 100
-# 2;34 = 18
-# 2;35 = 90
-# 2;36 = 30
-# 2;37 = 102
-
-PS1='${debian_chroot:+($debian_chroot)}\u@\h\[\e[00m\]:\[\e[01;34m\]\w\[\e[00m\]'
-if [[ $(type -t __git_ps1) == "function" ]]; then
-  PS1=$PS1'$(__git_ps1 " (\[\e[38;5;28m\]%s\[\e[00m\])")'
-fi
-PS1=$PS1'\$ '
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
 export PAGER=less
 # Better less defaults
 export LESS=-FRXsSi
@@ -206,6 +188,47 @@ if [[ $TERM == 'linux' ]]; then
   for ((i=0; i < ${#palette[@]}; i++)); do
     printf '\e]P%x%s\e\\' $i ${palette[$i]}
   done
+fi
+
+__envvar_display () {
+  text=$1
+  fmtstring=$2
+  if [[ $text ]]; then
+    printf -- "$fmtstring" "${text}"
+  fi
+}
+
+# AWS stuff
+__aws_profile_display () {
+  if [[ $AWS_PROFILE ]]; then
+    printf -- "$1" "${AWS_PROFILE}"
+  fi
+}
+
+__bash_ps1_extras () {
+  echo -n '$(__envvar_display "$AWS_PROFILE" " (AWS: \[\e[38;5;28m\]%s\[\e[00m\])")'
+  #echo -n '\[$(__aws_profile_display " (AWS: \e[38;5;28m%s\e[00m)")\]'
+  if [[ $(type -t __git_ps1) == "function" ]]; then
+    echo -n '$(__git_ps1 " (\[\e[38;5;28m\]%s\[\e[00m\])")'
+  fi
+}
+
+# vte changed how it handles dim colors... I preferred 2;32 for dim green, but now I don't like it.
+# The old vte used specific indexes into the 256-color palette for dim colors:
+# how to use: 38;5;n
+# 2;30 = 16  #000000
+# 2;31 = 88  #870000
+# 2;32 = 28  #008700
+# 2;33 = 100 #878700
+# 2;34 = 18  #000087
+# 2;35 = 90  #870087
+# 2;36 = 30  #008787
+# 2;37 = 102 #878787
+
+PS1='${debian_chroot:+($debian_chroot)}\u@\h\[\e[00m\]:\[\e[01;34m\]\w\[\e[00m\]'"$(__bash_ps1_extras)"'\$ '
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
 fi
 
 [[ -f $HOME/.bashrc_local ]] && source $HOME/.bashrc_local

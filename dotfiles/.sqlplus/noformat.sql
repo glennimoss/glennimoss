@@ -2,7 +2,7 @@ SET echo off
 SET feedback off
 SET heading off
 SET linesize 1000
-SET newpage 0
+SET newpage NONE
 SET null ""
 SET pagesize 0
 SET trimspool on

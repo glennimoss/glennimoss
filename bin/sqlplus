@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
 
-SQLPLUS=sqlplus
+SQLPLUS=
 if [[ $(which sqlplus64) ]]; then
   SQLPLUS=sqlplus64
+fi
+if [[ -f $HOME/sqlplus/sqlplus ]]; then
+  SQLPLUS=$HOME/sqlplus/sqlplus
+fi
+
+if [[ ! $SQLPLUS ]]; then
+  echo "sqlplus not found!"
+  exit 1
 fi
 
 if [[ $(which rlwrap) ]]; then
   touch $HOME/.sqlplus/history
-  SQLPLUS="rlwrap -f $HOME/.sqlplus/sql_reserved.dict -f $HOME/.sqlplus/history -r -H $HOME/.sqlplus/history --histsize 30000 $SQLPLUS"
+  #SQLPLUS=(rlwrap -a'Enter password:' -N -f $HOME/.sqlplus/sql_reserved.dict -f $HOME/.sqlplus/history -r -H $HOME/.sqlplus/history --histsize 30000 "$SQLPLUS")
+  SQLPLUS=(rlwrap -f $HOME/.sqlplus/sql_reserved.dict -f $HOME/.sqlplus/history -r -H $HOME/.sqlplus/history --histsize 30000 "$SQLPLUS")
 fi
 
 SCRATCH=$HOME/.sqlplus/scratch${$}.sql
@@ -20,6 +29,6 @@ if [[ $LINES ]]; then
   echo "set pages ${LINES}" >> $HOME/.sqlplus/dyn_login.sql
 fi
 
-$SQLPLUS -L $*
+"${SQLPLUS[@]}" -L "$@"
 
 rm -f $SCRATCH

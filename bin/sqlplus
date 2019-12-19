@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 
-SQLPLUS=
-if [[ $(which sqlplus64) ]]; then
-  SQLPLUS=sqlplus64
-fi
-if [[ -f $HOME/sqlplus/sqlplus ]]; then
-  SQLPLUS=$HOME/sqlplus/sqlplus
-fi
+shopt -s extglob
 
-if [[ ! $SQLPLUS ]]; then
+SQLPLUS=(/usr/local/bin/sqlplus?(64))
+SQLPLUS=${SQLPLUS[0]}
+if [[ ! -x $SQLPLUS ]]; then
   echo "sqlplus not found!"
+  echo "Try installing the instant client and sqlplus:"
+  if [[ $(uname -s) == "Darwin*" ]]; then
+    echo "  brew tap InstantClientTap/instantclient"
+    echo "  brew install instantclient-basic"
+    echo "  brew install instantclient-sqlplus"
+  else
+    echo "  Google how..."
+  fi
   exit 1
 fi
 

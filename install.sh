@@ -40,7 +40,7 @@ if [[ -e $HOME/home_backup ]]; then
   exit 1
 fi
 
-shopt -s extglob nullglob
+shopt -s extglob nullglob dotglob
 
 make_destname () {
   if [[ ! $1 ]]; then

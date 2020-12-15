@@ -90,6 +90,8 @@ Plugin 'mileszs/ack.vim'
 " Search results counter, shows "Match N of M matches"
 Plugin 'IndexedSearch'
 
+" Golang
+Plugin 'fatih/vim-go'
 
 " These are ones I either didn't like, or didn't try enough:
 " Class/module browser
@@ -350,6 +352,9 @@ endif
 let g:airline_symbols.whitespace = '␠'
 let g:airline#extensions#whitespace#enabled = 0
 
+" Vim-Go ------------------------------
+
+let g:go_doc_keywordprg_enabled = 0
 
 " My Settings ==============================================
 

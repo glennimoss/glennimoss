@@ -17,6 +17,11 @@ if [[ -d "${HOME}/.local/bin" ]] ; then
   export PATH
 fi
 
+if [[ -d "${HOME}/go/bin" ]] ; then
+  PATH=${HOME}/go/bin:${PATH}
+  export PATH
+fi
+
 exists () {
   hash "$1" 2> /dev/null
 }
@@ -229,6 +234,7 @@ PS1='${debian_chroot:+($debian_chroot)}\u@\h\[\e[00m\]:\[\e[01;34m\]\w\[\e[00m\]
 
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 fi
 
 [[ -f $HOME/.bashrc_local ]] && source $HOME/.bashrc_local

@@ -10,12 +10,15 @@ alias less='less -XRs'                        # raw control characters
 alias whence='type -a'                        # where, of a sort
 alias diff='diff -u'
 alias :e='vim'
-alias go='gnome-open'
 alias hexdump='hexdump -C'
 alias info='info --vi-keys'
 
 if ! hash ack 2>/dev/null && hash ack-grep 2>/dev/null; then
   alias ack='ack-grep'
+fi
+
+if ! hash aws 2>/dev/null && hash aws2 2>/dev/null; then
+  alias aws='aws2'
 fi
 
 # base conversions

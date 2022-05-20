@@ -1,8 +1,10 @@
 @@ noformat
 
-COLUMN var_out NEW_VALUE 3
-SELECT '' AS var_out FROM dual WHERE 1=0;
-COLUMN var_out CLEAR
+COLUMN var_out1 NEW_VALUE 3
+COLUMN var_out2 NEW_VALUE 4
+SELECT '' AS var_out1, '' AS var_out2 FROM dual WHERE 1=0;
+COLUMN var_out1 CLEAR
+COLUMN var_out2 CLEAR
 
 SET heading on
 SET termout off
@@ -11,7 +13,7 @@ SPOOL &1
 
 INPUT garbage -- Stupidness to avoid error message
 del 1 last
-INPUT &2 &3
+INPUT &2 &3 &4
 /
 
 SPOOL OFF

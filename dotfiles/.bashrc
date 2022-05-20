@@ -101,15 +101,6 @@ fi
 # by ssh.
 [[ $- =~ i ]] || { : ; return 0 ; }
 
-# If a bare directory (without cd) is the command, then just cd into it.
-cd_if_directory () {
-  e=$? cmd=$BASH_COMMAND
-  if [[ $e == 126 && -d $cmd ]]; then
-    cd "$cmd"
-  fi
-}
-trap 'cd_if_directory' ERR
-
 
 # ignoredups and ignorespace
 HISTCONTROL=ignoreboth

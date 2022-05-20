@@ -1,6 +1,7 @@
 --pager=less -FRXsS
 --smart-case
 --ignore-dir=.meteor
+--ignore-dir=.garden
 --type-set=tmpl=.tmpl
 --type-set=stg=.stg
 --type-set=g=.g
@@ -8,3 +9,4 @@
 --type-set=coffee=.coffee
 --type-set=vala=.vala
 --type-set=csv=.csv
+--type-set=tf=.tf

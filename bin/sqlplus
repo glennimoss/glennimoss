@@ -2,12 +2,25 @@
 
 shopt -s extglob
 
-SQLPLUS=(/usr/local/bin/sqlplus?(64))
-SQLPLUS=${SQLPLUS[0]}
+source ~/lib/bash/logic.sh
+macos=$([[ $(uname -s) =~ ^Darwin ]]; bool)
+
+if $macos; then
+  SQLPLUS=(/usr/local/bin/sqlplus?(64))
+  SQLPLUS=${SQLPLUS[0]}
+
+  export DYLD_LIBRARY_PATH=$(brew --prefix)/lib
+else
+  SQLPLUS=sqlplus
+  if [[ $(which sqlplus64) ]]; then
+    SQLPLUS=sqlplus64
+  fi
+fi
+
 if [[ ! -x $SQLPLUS ]]; then
   echo "sqlplus not found!"
   echo "Try installing the instant client and sqlplus:"
-  if [[ $(uname -s) == "Darwin*" ]]; then
+  if $macos; then
     echo "  brew tap InstantClientTap/instantclient"
     echo "  brew install instantclient-basic"
     echo "  brew install instantclient-sqlplus"
@@ -21,6 +34,8 @@ if [[ $(which rlwrap) ]]; then
   touch $HOME/.sqlplus/history
   #SQLPLUS=(rlwrap -a'Enter password:' -N -f $HOME/.sqlplus/sql_reserved.dict -f $HOME/.sqlplus/history -r -H $HOME/.sqlplus/history --histsize 30000 "$SQLPLUS")
   SQLPLUS=(rlwrap -f $HOME/.sqlplus/sql_reserved.dict -f $HOME/.sqlplus/history -r -H $HOME/.sqlplus/history --histsize 30000 "$SQLPLUS")
+else
+  echo "rlwrap not found. I recommend installing it!"
 fi
 
 SCRATCH=$HOME/.sqlplus/scratch${$}.sql

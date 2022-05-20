@@ -29,7 +29,12 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " This lets me reuse the Vundle commands below
 command -nargs=+ Plugin NeoBundle <args>
 
-NeoBundle 'Shougo/vimproc.vim', {'build' : {'linux' : 'make'}}
+NeoBundle 'Shougo/vimproc.vim', {
+      \   'build' : {
+      \       'linux' : 'make',
+      \       'mac' : 'make -f make_mac.mak',
+      \   }
+      \}
 
 " Plugins I really use and will never remove:
 Plugin 'altercation/vim-colors-solarized'
@@ -68,13 +73,15 @@ Plugin 'shougo/unite.vim'
 " View images in vim??
 Plugin 'tpope/vim-afterimage'
 " Git functionality
-Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-fugitive'
 " Better .tmux.conf editing
 Plugin 'tmux-plugins/vim-tmux'
 " Focus events passthrough from tmux
 "Plugin 'tmux-plugins/vim-tmux-focus-events'
 " Background make process
 Plugin 'tpope/vim-dispatch'
+" Diff parts of the same file
+Plugin 'AndrewRadev/linediff.vim'
 
 " I don't know about these ones:
 " Python and PHP Debugger
@@ -92,55 +99,6 @@ Plugin 'IndexedSearch'
 
 " Golang
 Plugin 'fatih/vim-go'
-
-" These are ones I either didn't like, or didn't try enough:
-" Class/module browser
-"Plugin 'majutsushi/tagbar'
-" Code and files fuzzy finder
-"Plugin 'kien/ctrlp.vim'
-" Extension to ctrlp, for fuzzy command finder
-"Plugin 'fisadev/vim-ctrlp-cmdpalette'
-" Zen coding
-"Plugin 'mattn/emmet-vim'
-" Git integration
-"Plugin 'motemen/git-vim'
-" Tab list panel
-"Plugin 'kien/tabman.vim'
-" Terminal Vim with 256 colors colorscheme
-"Plugin 'fisadev/fisa-vim-colorscheme'
-" Consoles as buffers
-"Plugin 'rosenfeld/conque-term'
-" Autoclose
-"Plugin 'Townk/vim-autoclose'
-" Python mode (indentation, doc, refactor, lints, code checking, motion and
-" operators, highlighting, run and ipdb breakpoints)
-"Plugin 'klen/python-mode'
-" Better autocompletion
-"Plugin 'Shougo/neocomplcache.vim'
-" Snippets manager (SnipMate), dependencies, and snippets repo
-"Plugin 'MarcWeber/vim-addon-mw-utils'
-"Plugin 'tomtom/tlib_vim'
-"Plugin 'honza/vim-snippets'
-"Plugin 'garbas/vim-snipmate'
-" Automatically sort python imports
-"Plugin 'fisadev/vim-isort' " Buggy...
-" Drag visual blocks arround
-"Plugin 'fisadev/dragvisuals.vim'
-" Window chooser
-"Plugin 't9md/vim-choosewin'
-" Relative numbering of lines (0 is the current line)
-" (disabled by default because is very intrusive and can't be easily toggled
-" on/off. When the plugin is present, will always activate the relative
-" numbering every time you go to normal mode. Author refuses to add a setting
-" to avoid that)
-"Plugin 'myusuf3/numbers.vim'
-" Yank history navigation
-"Plugin 'YankRing.vim'
-"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-"Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-"Plugin 'DokuVimKi'
-" Paint css colors with the real color
-"Plugin 'lilydjwg/colorizer'
 
 
 " Required:
@@ -335,13 +293,6 @@ highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
 highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
-" Window Chooser ------------------------------
-
-" mapping
-nmap  -  <Plug>(choosewin)
-" show big letters
-let g:choosewin_overlay_enable = 1
-
 " Airline ------------------------------
 
 let g:airline_theme = 'solarized'
@@ -438,7 +389,7 @@ set tags=.tags,tags     " use .tags for tags file
 set nojoinspaces        " don't add spaces after period on gpip
 
 "" keyboard shortcuts
-let mapleader = "\\"    " use \ as leader char (default, but be safe)
+let mapleader = "-"    " Easier to reach than backslash
 
 " Better than esc
 inoremap kj <Esc>
@@ -590,7 +541,7 @@ function! s:MaybeRepoRoot ()
     let root=system("svn info | grep -oP '^Working Copy Root Path: \\K.*$'")
   endif
   if v:shell_error == 0
-    execute "setlocal path+=" . root[:-2] . "/**"
+    execute "setlocal path+=" . fnameescape(root[:-2]) . "'/**"
   endif
 endfunction
 

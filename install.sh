@@ -10,6 +10,13 @@ if ! hash realpath 2>/dev/null; then
   exit 101
 fi
 
+# OS-specific workarounds
+case $(uname -s) in
+  MINGW*)
+    export MSYS=winsymlinks:nativestrict
+    ;;
+esac
+
 cd -P $(dirname "$0")
 ROOT=$(pwd -P)
 

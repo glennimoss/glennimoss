@@ -87,6 +87,9 @@ case $(uname -s) in
   Darwin*)
     . $HOME/.bashrc_darwin
     ;;
+  MINGW*)
+    . $HOME/.bashrc_mingw
+    ;;
 esac
 
 if [[ -f ~/.bash_aliases ]]; then

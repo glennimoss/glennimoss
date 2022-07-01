@@ -1,0 +1,1 @@
+export MSYS=winsymlinks:nativestrict

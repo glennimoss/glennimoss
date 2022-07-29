@@ -2,14 +2,17 @@ jh=$(/usr/libexec/java_home 2>/dev/null)
 if [[ $? == 0 ]]; then
   export JAVA_HOME="$jh"
 fi
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
-#export CLICOLOR=1
-
-if type brew &>/dev/null; then
+if exists brew; then
   HOMEBREW_PREFIX="$(brew --prefix)"
+
+  export PATH="${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin:$PATH"
+  export MANPATH="${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnuman:$MANPATH"
+
   if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
     source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
   else

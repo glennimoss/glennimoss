@@ -57,9 +57,11 @@ if exists aws_completer; then
   complete -C $(hash -t aws_completer) aws
 fi
 
-JAVA_HOME=$(realpath /usr/bin/java)
-JAVA_HOME=${JAVA_HOME%%/jre/*}
-export JAVA_HOME
+if [[ -z $JAVA_HOME && -L /usr/bin/java ]]; then
+  JAVA_HOME=$(realpath /usr/bin/java)
+  JAVA_HOME=${JAVA_HOME%%/jre/*}
+  export JAVA_HOME
+fi
 
 # Sort things sensibly
 export LC_COLLATE=POSIX

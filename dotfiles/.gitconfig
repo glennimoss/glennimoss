@@ -12,9 +12,9 @@
   br = branch -vv
   show-merge = log --decorate --abbrev-commit --stat -M -n1 -p -m -c
   addnw = !sh -c 'git diff -U0 -w --no-color "$@" | git apply -p0 --cached --ignore-whitespace --unidiff-zero -'
-#[user]
-#  name = ...
-#  email = ...
+[user]
+  name = Glenn Moss
+  email = glennimoss+github@gmail.com
 [include]
   path = .gitconfiglocal
 [diff]

@@ -13,11 +13,11 @@ alias :e='vim'
 alias hexdump='hexdump -C'
 alias info='info --vi-keys'
 
-if ! hash ack 2>/dev/null && hash ack-grep 2>/dev/null; then
+if ! exists ack && exists ack-grep; then
   alias ack='ack-grep'
 fi
 
-if ! hash aws 2>/dev/null && hash aws2 2>/dev/null; then
+if ! exists aws && exists aws2; then
   alias aws='aws2'
 fi
 
@@ -84,7 +84,7 @@ function svnpropdiff {
 [[ $- =~ i ]] || return 0
 
 # enable color support of ls and also add handy aliases
-if hash dircolors; then
+if exists dircolors; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls -bF --color=auto'
 

@@ -5,7 +5,11 @@ if (( ${BASH_VERSINFO[0]} < 4 )); then
   exit 100
 fi
 
-if ! hash realpath 2>/dev/null; then
+exists () {
+  hash "$1" &> /dev/null
+}
+
+if ! exists realpath; then
   echo 'Command `realpath` not found. Please install coreutils.'
   exit 101
 fi

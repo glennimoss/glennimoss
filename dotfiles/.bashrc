@@ -23,7 +23,7 @@ if [[ -d "${HOME}/go/bin" ]] ; then
 fi
 
 exists () {
-  hash "$1" 2> /dev/null
+  hash "$1" &> /dev/null
 }
 
 

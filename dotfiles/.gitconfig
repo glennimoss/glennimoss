@@ -15,8 +15,6 @@
 [user]
   name = Glenn Moss
   email = glennimoss+github@gmail.com
-[include]
-  path = .gitconfiglocal
 [diff]
 	renames = copy
 	noprefix = true
@@ -34,3 +32,5 @@
 	tool = vimdiff
 [pull]
 	rebase = false
+[include]
+  path = .gitconfiglocal

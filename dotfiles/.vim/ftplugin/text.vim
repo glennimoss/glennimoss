@@ -16,4 +16,5 @@ set wrapmargin=0
 noreabbrev <buffer> \forall\ ∀
 noreabbrev <buffer> \exists\ ∃
 noreabbrev <buffer> \in\ ∈
+noreabbrev <buffer> \notin\ ∉
 noreabbrev <buffer> \subset\ ⊂

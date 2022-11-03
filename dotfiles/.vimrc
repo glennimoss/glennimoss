@@ -29,18 +29,13 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " This lets me reuse the Vundle commands below
 command -nargs=+ Plugin NeoBundle <args>
 
-NeoBundle 'Shougo/vimproc.vim', {
-      \   'build' : {
-      \       'linux' : 'make',
-      \       'mac' : 'make -f make_mac.mak',
-      \   }
-      \}
+NeoBundle 'Shougo/vimproc.vim'
 
 " Plugins I really use and will never remove:
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'bkad/CamelCaseMotion'
 Plugin 'tpope/vim-surround'
-Plugin 'matchit.zip'
+Plugin 'andymass/vim-matchup' " Plugin 'matchit.zip'
 Plugin 'vim-scripts/scratch.vim'
 
 " These are pretty good:

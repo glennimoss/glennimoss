@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+if (( ${#@} < 1 )); then
+  echo "Usage: $0 [HOST]"
+  exit 1
+fi
+host=$1
+
+case $(uname -s) in
+  Darwin*)
+    ttl_flag=-m
+    tmout_flag=-t
+    ;;
+  Linux*)
+    ttl_flag=-t
+    tmout_flag=-w
+    ;;
+  *)
+    echo "I don't know how to ping on this system"
+    exit 2
+    ;;
+esac
+
+
+for ttl in {1..20}; do
+  echo output=ping -q $tmout_flag 2 -c1 $ttl_flag $ttl $host \| grep -io 'from \([^ ]\+ \)?[^ :]\+'
+  ec=$?
+  if [[ $ec != 0 ]]; then
+    echo "$ec: ${#output}"
+  fi
+  echo "$output"
+done
+

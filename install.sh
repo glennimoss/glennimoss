@@ -126,13 +126,13 @@ install () {
         if (( ${#whitelist[@]} )); then
           log_warning "WARNING: You probably shouldn't use both $srcroot/_ignore and $srcroot/_whitelist"
         fi
-        mapfile -t ignore < $srcfile
+        mapfile -t ignore < "$srcfile"
         ;;
       _whitelist)
         if (( ${#ignore[@]} )); then
           log_warning "WARNING: You probably shouldn't use both $srcroot/_ignore and $srcroot/_whitelist"
         fi
-        mapfile -t whitelist < $srcfile
+        mapfile -t whitelist < "$srcfile"
         ;;
       __pycache__)
         # ignored
@@ -147,7 +147,7 @@ install () {
   for file in !(.|..|_*); do
     log_trace "looking at $srcroot/$file"
     #git check-ignore -q $file; local process=$? # Returns 0 if the file is ignored, or 1 otherwise
-    local process=$(git check-ignore -q $file; notbool) # Returns 0 if the file is ignored, or 1 otherwise
+    local process=$(git check-ignore -q "$file"; notbool) # Returns 0 if the file is ignored, or 1 otherwise
     #if (( $process )); then
     if $process; then
       for pat in "${ignore[@]}"; do
@@ -182,7 +182,7 @@ install () {
         command_log_trace rm "$destfile"
       fi
 
-      install -r$(( $recursive_depth + 1 )) $srcroot/$file #| indent "  "
+      install -r$(( $recursive_depth + 1 )) "$srcroot/$file" #| indent "  "
       continue
     fi
 
@@ -216,11 +216,11 @@ install () {
       depth=
     fi
     log_debug "Clean up broken symlinks in $destdir using ${depth:-no depth restriction}"
-    for file in $(find -L $destdir $depth -type l); do
-      if [[ $(realpath -m $file) == $srcdir/* ]]; then
+    for file in $(find -L "$destdir" $depth -type l); do
+      if [[ $(realpath -m "$file") == $srcdir/* ]]; then
         log_info "Removing broken symlink $file"
         command_log_trace rm "$file"
-        command_log_trace rmdir -p --ignore-fail-on-non-empty $(dirname $file) 2>/dev/null
+        command_log_trace rmdir -p --ignore-fail-on-non-empty "$(dirname "$file")" 2>/dev/null
       fi
     done
   fi

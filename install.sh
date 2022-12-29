@@ -216,13 +216,13 @@ install () {
       depth=
     fi
     log_debug "Clean up broken symlinks in $destdir using ${depth:-no depth restriction}"
-    for file in $(find -L "$destdir" $depth -type l); do
+    while read -d $'\0' -r file; do
       if [[ $(realpath -m "$file") == $srcdir/* ]]; then
         log_info "Removing broken symlink $file"
         command_log_trace rm "$file"
         command_log_trace rmdir -p --ignore-fail-on-non-empty "$(dirname "$file")" 2>/dev/null
       fi
-    done
+    done < <(find -L "$destdir" $depth -type l -print0 2>/dev/null)
   fi
 
   popd >/dev/null
@@ -236,11 +236,11 @@ install () {
 log_info Installing dotfiles
 install dotfiles ""
 
-for topdir in $(find . -maxdepth 1 -type d \! \( -name dotfiles -o -name '.*' \) ); do
+while read -d $'\0' -r topdir; do
   topdir=${topdir#./}
   log_info Installing $topdir
   install -r "$topdir"
-done
+done < <(find . -maxdepth 1 -type d \! \( -name dotfiles -o -name '.*' \) -print0 )
 
 for install_script in "${install_scripts[@]}"; do
   command_log_info source "$install_script"

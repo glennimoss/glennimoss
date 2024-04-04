@@ -28,9 +28,9 @@ font:
   #  y: 0
 
   normal:
-    family: mononoki Nerd Font
+    family: Mononoki Nerd Font
     style: Regular
-  size: 16
+  size: 12 #16
   offset:
     x: 1
     y: 0

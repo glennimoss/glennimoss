@@ -6,34 +6,22 @@ if has('vim_starting')
     set nocompatible               " Be iMproved
   endif
 
-  let neobundle_readme=expand('~/.vim/bundle/neobundle.vim/README.md')
-  if !filereadable(neobundle_readme)
-    echo "Installing NeoBundle..."
-    echo ""
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   endif
-
-  " Required:
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 
-" Required:
-call neobundle#begin(expand('~/.vim/bundle'))
-
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
-
 " This lets me reuse the Vundle commands below
-command -nargs=+ Plugin NeoBundle <args>
+command -nargs=+ Plugin Plug <args>
 
-NeoBundle 'Shougo/vimproc.vim'
+call plug#begin('~/.vim/bundle')
 
 " Plugins I really use and will never remove:
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'bkad/CamelCaseMotion'
+Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'andymass/vim-matchup' " Plugin 'matchit.zip'
 Plugin 'vim-scripts/scratch.vim'
@@ -51,8 +39,10 @@ Plugin 'tpope/vim-sleuth'
 Plugin 'tpope/vim-characterize'
 " Indent text object
 Plugin 'michaeljsmith/vim-indent-object'
+" Rename file and make buffer match
+Plugin 'artnez/vim-rename'
 " Coffeescript syntax
-Plugin 'kchmck/vim-coffee-script'
+"Plugin 'kchmck/vim-coffee-script'
 
 " I'm experimenting with these:
 " Argument text object
@@ -62,19 +52,19 @@ Plugin 'vim-scripts/argtextobj.vim'
 " Trying this instead of gundo
 Plugin 'mbbill/undotree'
 " Multiple cursors
-Plugin 'terryma/vim-multiple-cursors'
+"Plugin 'terryma/vim-multiple-cursors'
 " Unite does everything
-Plugin 'shougo/unite.vim'
+"Plugin 'shougo/unite.vim'
 " View images in vim??
-Plugin 'tpope/vim-afterimage'
+"Plugin 'tpope/vim-afterimage'
 " Git functionality
-" Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 " Better .tmux.conf editing
 Plugin 'tmux-plugins/vim-tmux'
 " Focus events passthrough from tmux
 "Plugin 'tmux-plugins/vim-tmux-focus-events'
 " Background make process
-Plugin 'tpope/vim-dispatch'
+"Plugin 'tpope/vim-dispatch'
 " Diff parts of the same file
 Plugin 'AndrewRadev/linediff.vim'
 
@@ -86,45 +76,47 @@ Plugin 'fisadev/FixedTaskList.vim'
 " Git/mercurial/others diff icons on the side of the file lines
 Plugin 'mhinz/vim-signify'
 " Python and other languages code checker
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic' " This is deprecated and might be causing a bug with vim-go
 " Use ack from vim
 Plugin 'mileszs/ack.vim'
 " Search results counter, shows "Match N of M matches"
-Plugin 'IndexedSearch'
+"Plugin 'IndexedSearch'
+
+" I removed these manual plugins (which I probably wasn't using anyways)
+" These are their replacement repos if I ever want them back.
+"Plugin 'inkarkat/vim-ReplaceWithRegister'
+"Plugin 'docunext/closetag.vim'
 
 " Golang
-Plugin 'fatih/vim-go'
+Plugin 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+"Plugin 'govim/govim'
+
+"let g:go_debug = ["lsp"]
 
 
-" Required:
-call neobundle#end()
+call plug#end()
 
 " Required:
 filetype plugin indent on
 
-" If there are uninstalled bundles found on startup,
-" this will conveniently prompt you to install them.
-NeoBundleCheck
 
-
-" let g:syntastic_mode_map = { "mode": "passive" }
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_python_python_exec = "/usr/bin/python3"
-let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
-let g:syntastic_python_checkers = ["flake8", "pep257"]
-" Ignore indentation not being a multiple of 4:
-"let g:syntastic_python_flake8_quiet_messages = {"regex":"\\[E111\\]$"}
-" This set of ignores matches my personal style
-let g:syntastic_python_flake8_quiet_messages = {"regex":"\\[E\\(111\\|121\\|124\\|125\\|129\\|211\\|231\\)\\]$"}
-
-" Vundle ===================================================
-
-" Fisa Settings ============================================
+" disabled: " let g:syntastic_mode_map = { "mode": "passive" }
+" disabled: let g:syntastic_always_populate_loc_list=1
+" disabled: let g:syntastic_python_python_exec = "/usr/bin/python3"
+" disabled: let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
+" disabled: let g:syntastic_python_checkers = ["flake8", "pep257"]
+" disabled: " Ignore indentation not being a multiple of 4:
+" disabled: "let g:syntastic_python_flake8_quiet_messages = {"regex":"\\[E111\\]$"}
+" disabled: " This set of ignores matches my personal style
+" disabled: let g:syntastic_python_flake8_quiet_messages = {"regex":"\\[E\\(111\\|121\\|124\\|125\\|129\\|211\\|231\\)\\]$"}
 
 " Comment this line to enable autocompletion preview window
 " (displays documentation related to the selected completion option)
 " Disabled by default because preview makes the window flicker
 set completeopt-=preview
+
+set completeopt+=popup
+set completepopup=align:menu,border:off,highlight:Pmenu
 
 set undofile                      " persistent undos - undo after you re-open the file
 set undodir=~/.vimswap
@@ -195,20 +187,20 @@ let g:vim_debug_disable_mappings = 1
 "  \ 'file': '\.pyc$\|\.pyo$',
 "  \ }
 
-" Syntastic ------------------------------
-
-" show list of errors and warnings on the current file
-"nmap <leader>e :Errors<CR>
-" check also when just opened the file
-let g:syntastic_check_on_open = 1
-" don't put icons on the sign column (it hides the vcs status icons of signify)
-let g:syntastic_enable_signs = 0
-" custom icons (enable them if you use a patched font, and enable the previous
-" setting)
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
+" disabled: " Syntastic ------------------------------
+" disabled:
+" disabled: " show list of errors and warnings on the current file
+" disabled: "nmap <leader>e :Errors<CR>
+" disabled: " check also when just opened the file
+" disabled: let g:syntastic_check_on_open = 1
+" disabled: " don't put icons on the sign column (it hides the vcs status icons of signify)
+" disabled: let g:syntastic_enable_signs = 0
+" disabled: " custom icons (enable them if you use a patched font, and enable the previous
+" disabled: " setting)
+" disabled: let g:syntastic_error_symbol = '✗'
+" disabled: let g:syntastic_warning_symbol = '⚠'
+" disabled: let g:syntastic_style_error_symbol = '✗'
+" disabled: let g:syntastic_style_warning_symbol = '⚠'
 
 " Python-mode ------------------------------
 
@@ -235,32 +227,32 @@ let g:syntastic_style_warning_symbol = '⚠'
 " most of them not documented because I'm not sure how they work
 " (docs aren't good, had to do a lot of trial and error to make
 " it play nice)
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_ignore_case = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_fuzzy_completion = 1
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_fuzzy_completion_start_length = 1
-let g:neocomplcache_auto_completion_start_length = 1
-let g:neocomplcache_manual_completion_start_length = 1
-let g:neocomplcache_min_keyword_length = 1
-let g:neocomplcache_min_syntax_length = 1
-" complete with workds from any opened file
-let g:neocomplcache_same_filetype_lists = {}
-let g:neocomplcache_same_filetype_lists._ = '_'
+"let g:neocomplcache_enable_at_startup = 1
+"let g:neocomplcache_enable_ignore_case = 1
+"let g:neocomplcache_enable_smart_case = 1
+"let g:neocomplcache_enable_auto_select = 1
+"let g:neocomplcache_enable_fuzzy_completion = 1
+"let g:neocomplcache_enable_camel_case_completion = 1
+"let g:neocomplcache_enable_underbar_completion = 1
+"let g:neocomplcache_fuzzy_completion_start_length = 1
+"let g:neocomplcache_auto_completion_start_length = 1
+"let g:neocomplcache_manual_completion_start_length = 1
+"let g:neocomplcache_min_keyword_length = 1
+"let g:neocomplcache_min_syntax_length = 1
+"" complete with workds from any opened file
+"let g:neocomplcache_same_filetype_lists = {}
+"let g:neocomplcache_same_filetype_lists._ = '_'
 
 " TabMan ------------------------------
 
 " mappings to toggle display, and to focus on it
-let g:tabman_toggle = 'tl'
-let g:tabman_focus  = 'tf'
+"let g:tabman_toggle = 'tl'
+"let g:tabman_focus  = 'tf'
 
 " Autoclose ------------------------------
 
 " Fix to let ESC work as espected with Autoclose plugin
-let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
+"let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 
 " DragVisuals ------------------------------
 
@@ -302,6 +294,9 @@ let g:airline#extensions#whitespace#enabled = 0
 
 let g:go_doc_keywordprg_enabled = 0
 
+" CamelCaseMotion ---------------------
+let g:camelcasemotion_key = ','
+
 " My Settings ==============================================
 
 " allow backspacing over everything in insert mode
@@ -310,6 +305,7 @@ set backspace=indent,eol,start
 set autochdir           " cd to the directory of the file in the active buffer
 set autoindent          " always set autoindenting on
 set autoread            " read changed files, if no unsaved changes
+set diffopt+=vertical,indent-heuristic,algorithm:histogram
 set ffs=unix,dos,mac    " preferred file format order
 set fillchars=vert:\ ,stl:\ ,stlnc:\  "no funny fill chars in splitters
 set formatoptions+=rj   " add comment formatting stuff
@@ -332,13 +328,13 @@ set pastetoggle=<M-p>   " easy paste switch
 set relativenumber      " Display relative line offsets for lines other than current
 set report=0            " tell me when anything changes
 set ruler               " show the cursor position all the time
+set scrolloff=5         " always have 5 lines above or below the cursor
 set shellcmdflag=-lc    " Make :! be a login shell so .profile is read
 set shortmess=atI       " always show short messages
 set showcmd             " display incomplete commands
 set showmatch           " highlight matching brackets
 set smartcase           " don't ignore case if pattern contains uppercase
 set smartindent         " be smart about indenting new lines
-set scrolloff=5         " always have 5 lines above or below the cursor
 set spelllang=en_us
 set t_vb=1              " Use visual bell
 set title               "
@@ -510,9 +506,6 @@ nmap <silent> <C-n> <Esc>:call ToggleHLSearch()<CR>
 
 " path for find commands (cwd + projects dir + pear)
 " set path+=.,/home/gim/projects/**
-
-" tweaks for php indenter
-let PHP_removeCRwhenUnix=1
 
 " vim-sleuth should make these unnecessary
 set shiftwidth=2

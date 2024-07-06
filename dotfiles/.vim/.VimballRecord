@@ -1,4 +1,0 @@
-camelcasemotion.vba: call delete('/home/gim/.vim/autoload/camelcasemotion.vim')|call delete('/home/gim/.vim/plugin/camelcasemotion.vim')|call delete('/home/gim/.vim/doc/camelcasemotion.txt')
-javascript.vba: call delete('/home/gim/.vim/syntax/javascript.vim')|call delete('/home/gim/.vim/indent/javascript.vim')
-ReplaceWithRegister.vba: call delete('/home/gim/.vim/plugin/ReplaceWithRegister.vim')|call delete('/home/gim/.vim/doc/ReplaceWithRegister.txt')
-screen.vba: call delete('/home/gim/.vim/autoload/screen.vim')|call delete('/home/gim/.vim/doc/screen.txt')|call delete('/home/gim/.vim/plugin/screen.vim')

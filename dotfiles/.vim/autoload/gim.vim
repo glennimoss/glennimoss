@@ -10,6 +10,7 @@ let g:gim_project_root_files += [ ".vimproject",
                                 \ "Makefile",
                                 \ "Rakefile",
                                 \ "pom.xml",
+                                \ "go.mod",
                                 \]
 
 let s:projects = {}

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""lonetwin's pimped-up pythonrc
+r"""lonetwin's pimped-up pythonrc
 
 A custom pythonrc which provides:
   * colored prompts

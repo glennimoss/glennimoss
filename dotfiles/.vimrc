@@ -67,6 +67,10 @@ Plugin 'tmux-plugins/vim-tmux'
 "Plugin 'tpope/vim-dispatch'
 " Diff parts of the same file
 Plugin 'AndrewRadev/linediff.vim'
+" Punctuation pairs
+"Plugin 'LunarWatcher/auto-pairs'  " cohama/lexima.vim is supposed to be good too
+" HTML tag closing
+Plugin 'alvan/vim-closetag'
 
 " I don't know about these ones:
 " Python and PHP Debugger
@@ -85,7 +89,6 @@ Plugin 'mileszs/ack.vim'
 " I removed these manual plugins (which I probably wasn't using anyways)
 " These are their replacement repos if I ever want them back.
 "Plugin 'inkarkat/vim-ReplaceWithRegister'
-"Plugin 'docunext/closetag.vim'
 
 " Golang
 Plugin 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
@@ -317,6 +320,7 @@ set laststatus=2        " always show status line
 set lazyredraw          " don't redraw during macros
 set listchars=tab:\|-,trail:·,extends:>,precedes:<,eol:$,nbsp:⍽
 set mat=5               " tenths of a second to blink matching brackets
+set maxmempattern=10000 " 10mb for crazy big syntaxt matching patterns
 set nobackup            " don't keep a backup file
 set noerrorbells        " don't beep damn it
 set noicon              "
@@ -547,10 +551,6 @@ if has("autocmd")
     " " Disable the C-C commenting and resote expected behavior in the cmdwin
     " autocmd CmdwinEnter * noremap <buffer> <C-C> <C-C>
 
-    let b:closetag_html_style=1
-    autocmd Filetype html,xml,xsl,php source ~/.vim/scripts/closetag.vim
-
-
     " Surely there's a better way...
     " " svn commits
     " autocmd BufNewFile,BufRead  svn-commit.* setf svn
@@ -604,7 +604,36 @@ if has("autocmd")
 
 endif
 
+" Term sequences
+let &t_Cs = "\e[4:3m"
+let &t_Ce = "\e[4:0m"
+
 set t_RV=
 let g:sparkupNextMapping = '<c-l>'
+
+
+" vim -b : edit binary using xxd-format!
+augroup Binary
+  autocmd!
+  autocmd BufReadPre  *.bin set binary
+  autocmd BufReadPost *.bin
+    \ if &binary
+    \ |   execute "silent %!xxd -c 32"
+    \ |   set filetype=xxd
+    \ |   redraw
+    \ | endif
+  autocmd BufWritePre *.bin
+    \ if &binary
+    \ |   let s:view = winsaveview()
+    \ |   execute "silent %!xxd -r -c 32"
+    \ | endif
+  autocmd BufWritePost *.bin
+    \ if &binary
+    \ |   execute "silent %!xxd -c 32"
+    \ |   set nomodified
+    \ |   call winrestview(s:view)
+    \ |   redraw
+    \ | endif
+augroup END
 
   " vim: set sw=2 ts=2 sts=2 et :

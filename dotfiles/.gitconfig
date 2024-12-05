@@ -5,6 +5,7 @@
 [alias]
   ll = log --graph --decorate --abbrev-commit --stat -M -D
   st = status -uno
+  stu = status -uall
   diffw = diff --color-words='\\w+|.'
   diffchars = diff --color-words=.
   ready = rebase -i @{u}
@@ -12,13 +13,14 @@
   br = branch -vv
   show-merge = log --decorate --abbrev-commit --stat -M -n1 -p -m -c
   addnw = !sh -c 'git diff -U0 -w --no-color "$@" | git apply -p0 --cached --ignore-whitespace --unidiff-zero -'
+  gone-branches = for-each-ref --format '%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' --omit-empty refs/heads
 [user]
   name = Glenn Moss
   email = glennimoss+github@gmail.com
 [diff]
 	renames = copy
 	noprefix = true
-	algorithm = patience
+	algorithm = histogram
 [push]
 	default = simple
 [grep]

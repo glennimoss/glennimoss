@@ -9,3 +9,6 @@ function! s:build_go_files()
 endfunction
 
 nmap <leader>b  :<C-u>call <SID>build_go_files()<CR>
+
+nnoremap <buffer> <silent> gr <Plug>(go-referrers)
+nnoremap <buffer> <silent> gI <Plug>(go-info)

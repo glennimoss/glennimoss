@@ -16,7 +16,7 @@ if [[ $(uname -s) == Darwin* ]] && ! exists brew; then
   fi
   eval "$(/opt/homebrew/bin/brew shellenv)"
   echo Installing homebrew staples...
-  brew install alacritty bash bash-completion@2 coreutils git gnu-sed gnu-tar go jq puzzles tmux vim xdot
+  brew install ack alacritty bash bash-completion@2 coreutils git gnu-sed gnu-tar go jq puzzles tmux vim xdot
   echo Setting shell for $USER to /opt/homebrew/bin/bash ...
   sudo chsh -s /opt/homebrew/bin/bash $USER
   $0
@@ -146,23 +146,18 @@ install () {
 
   for file in !(.|..|_*); do
     log_trace "looking at $srcroot/$file"
-    #git check-ignore -q $file; local process=$? # Returns 0 if the file is ignored, or 1 otherwise
-    local process=$(git check-ignore -q "$file"; notbool) # Returns 0 if the file is ignored, or 1 otherwise
-    #if (( $process )); then
+    local process=$(git check-ignore -q "$file"; notbool) # Returns false if the file is ignored, or true otherwise
     if $process; then
       for pat in "${ignore[@]}"; do
         if [[ $file == $pat ]]; then
-          #process=0
           process=false
           log_debug "Blacklisted: $file"
         fi
       done
     fi
-    #process=$(( $process && ! ${#whitelist[@]} ))
     process=$( $process && (( ! ${#whitelist[@]} )); bool)
     for pat in "${whitelist[@]}"; do
       if [[ $file == $pat ]]; then
-        #process=1
         process=true
         log_debug "Whitelisted: $file"
         break
@@ -187,7 +182,6 @@ install () {
     fi
 
 
-    #if (( ! $process )); then
     if ! $process; then
       log_trace "Not processing $srcfile"
       if $already_linked; then

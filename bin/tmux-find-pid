@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+if [[ $# < 1 ]]; then
+  echo "Usage: $0 PID"
+  exit 1
+fi
+
+findpid=$1
+ppid=$(ps -p $findpid -o ppid=)
+if [[ ! $ppid ]]; then
+  echo "process $findpid not found"
+  exit 1
+fi
+
+pane=$(tmux list-panes -a -F "#{pane_id}" -f "#{==:#{pane_pid},$ppid}")
+if [[ ! $pane ]]; then
+  echo "tmux pane $pane not found"
+  exit 1
+fi
+
+tmux select-pane -t $pane
+tmux select-window -t $pane

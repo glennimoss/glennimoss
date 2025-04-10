@@ -96,6 +96,13 @@ Plugin 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 
 "let g:go_debug = ["lsp"]
 
+" Typescript
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'for': ['javascript', 'javascriptreact', 'typescript', 'typescriptreact']}
+let g:coc_global_extensions = [
+  \ 'coc-tsserver'
+  \ ]
+
+Plug '~/git/coc-keys', {'for': ['javascript', 'javascriptreact', 'typescript', 'typescriptreact']}
 
 call plug#end()
 

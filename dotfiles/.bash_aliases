@@ -80,6 +80,14 @@ function svnpropdiff {
   diff -F '^  [^ ]' <(svn pl -v -r $pre .) <(svn pl -v -r $post .)
 }
 
+jwt-decode() {
+  local fd=0
+  if [[ $1 ]]; then
+    exec {fd}<<< $1
+  fi
+  jq -R 'split(".") |.[0:2] | map(gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d) | map(fromjson)' <&$fd
+}
+
 # If not running interactively, don't do anything more
 [[ $- =~ i ]] || return 0
 

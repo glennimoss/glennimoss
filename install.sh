@@ -4,23 +4,50 @@ exists () {
   hash "$1" &> /dev/null
 }
 
-if [[ $(uname -s) == Darwin* ]] && ! exists brew; then
-  if [[ ! -x /opt/homebrew/bin/brew ]]; then
-    echo Installing homebrew...
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    if [[ ! -x /opt/homebrew/bin/brew ]]; then
-      echo Homebrew not found. Did installation fail?
-      exit 3
-    fi
-    echo Homebrew installed.
+if [[ $(uname -s) == Darwin* ]]; then
+  if ! sudo -nv >/dev/null 2>&1; then
+    echo No sudo privileges!
+    exit 2
   fi
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  echo Installing homebrew staples...
-  brew install ack alacritty bash bash-completion@2 coreutils git gnu-sed gnu-tar go jq puzzles tmux vim xdot
-  echo Setting shell for $USER to /opt/homebrew/bin/bash ...
-  sudo chsh -s /opt/homebrew/bin/bash $USER
-  $0
-  exit 0
+
+  if ! exists brew; then
+    if [[ ! -x /opt/homebrew/bin/brew ]]; then
+      echo Installing homebrew...
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      if [[ ! -x /opt/homebrew/bin/brew ]]; then
+        echo Homebrew not found. Did installation fail?
+        exit 3
+      fi
+      echo Homebrew installed.
+    fi
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+
+  essentials=(
+    ack
+    alacritty
+    bash
+    bash-completion@2
+    coreutils
+    git
+    gnu-sed
+    gnu-tar
+    go
+    jq
+    puzzles
+    tmux
+    vim
+    xdot
+  )
+
+  if (( $(brew ls | wc -l) < ${#essentials[@]} )); then
+    echo Installing homebrew staples...
+    brew install "${essentials[@]}"
+    echo Setting shell for $USER to /opt/homebrew/bin/bash ...
+    sudo chsh -s /opt/homebrew/bin/bash $USER
+    $0
+    exit 0
+  fi
 fi
 
 if (( ${BASH_VERSINFO[0]} < 4 )); then
